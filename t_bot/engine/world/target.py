@@ -8,8 +8,10 @@ from t_bot.transform.direction import Direction
 from t_bot.transform.vector import Vector2i
 
 
-class BaseWorldTarget(EventBus, BaseRenderable):
+class BaseWorldTarget(BaseRenderable, EventBus):
     def __init__(self, texture: str) -> None:
+        self.join_world = EventSubscriber()
+        self.input = EventSubscriber()
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
@@ -17,9 +19,6 @@ class BaseWorldTarget(EventBus, BaseRenderable):
         self.background: str = "black"
         self.foreground: str = "white"
         self.direction: Direction = Direction.UP
-
-        self.join_world = EventSubscriber()
-        self.input = EventSubscriber()
 
     def render(self) -> Text:
         return Text(self.texture, style=self.style)

@@ -9,11 +9,12 @@ class TBot(EventBus):
     def __init__(self) -> None:
         self.game_controller = GameController()
         self.screen_controller = ScreenController()
+        super().__init__()
         self.world = GameWorld()
         self.world_renderer = WorldRenderer(self.world)
 
-    def register_event(self):
-        super().register_event()
+    def register_events(self):
+        super().register_events()
 
         @self.game_controller.input.subscribe
         def input(char: str):

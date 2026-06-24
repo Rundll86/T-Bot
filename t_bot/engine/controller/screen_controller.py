@@ -7,6 +7,7 @@ from t_bot.engine.event.event_bus import EventBus
 
 class ScreenController(EventBus):
     def __init__(self) -> None:
+        super().__init__()
         self.console = Console(highlight=False)
 
     def redraw(self, data: str):

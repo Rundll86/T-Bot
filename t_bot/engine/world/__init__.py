@@ -7,9 +7,9 @@ from t_bot.transform.vector import Vector2i
 
 class GameWorld(EventBus):
     def __init__(self) -> None:
-        self.targets: list[BaseWorldTarget] = []
-
         self.input = EventSubscriber()
+        self.targets: list[BaseWorldTarget] = []
+        super().__init__()
 
     def add_target(self, target: BaseWorldTarget) -> BaseWorldTarget:
         self.targets.append(target)
@@ -19,8 +19,8 @@ class GameWorld(EventBus):
     def send_input(self, char: str) -> None:
         self.input.emit(char)
 
-    def register_event(self):
-        super().register_event()
+    def register_events(self):
+        super().register_events()
 
         @self.input.subscribe
         def input(char: str):
