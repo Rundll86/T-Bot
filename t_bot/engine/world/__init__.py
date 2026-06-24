@@ -1,4 +1,4 @@
-from t_bot.content.entity.player import PlayerEntity
+from t_bot.content.entities.player import PlayerEntity
 from t_bot.engine.renderer import BaseRenderer
 from t_bot.engine.world.target import BaseWorldTarget
 from t_bot.transform.vector import Vector2i
@@ -9,7 +9,12 @@ class GameWorld:
         self.targets: list[BaseWorldTarget] = []
 
     def init(self):
-        self.targets.append(PlayerEntity())
+        self.add_target(PlayerEntity())
+
+    def add_target(self, target: BaseWorldTarget) -> BaseWorldTarget:
+        self.targets.append(target)
+        target.join_world.emit(self)
+        return target
 
 
 class WorldRenderer(BaseRenderer):

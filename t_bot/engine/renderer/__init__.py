@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from rich.text import Text
+
 from t_bot.transform.vector import Vector2i
 
 
@@ -17,7 +19,7 @@ class BaseRenderer(ABC):
     def replace_at(
         self,
         position: Vector2i,
-        new_str: str,
+        new_str: str | Text,
         length_override: int = -1,
     ) -> None:
         n = length_override if length_override >= 0 else len(new_str)
@@ -28,7 +30,12 @@ class BaseRenderer(ABC):
         line = self.buffer[row]
         if len(line) < col:
             line = line.ljust(col)
-        line = line[:col] + new_str + line[col + n :]
+        line = (
+            line[:col] + new_str.markup
+            if isinstance(new_str, Text)
+            else new_str + line[col + n :]
+        )
+        print(line)
         self.buffer[row] = line
 
     def read(self) -> str:
