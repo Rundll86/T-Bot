@@ -22,21 +22,32 @@ class BaseRenderer(ABC):
         new_str: str | Text,
         length_override: int = -1,
     ) -> None:
-        n = length_override if length_override >= 0 else len(new_str)
+        if isinstance(new_str, Text):
+            middle = new_str
+            visible_len = len(new_str.plain)
+        else:
+            middle = Text(new_str)
+            visible_len = len(new_str)
+
+        n = length_override if length_override >= 0 else visible_len
         row = position.y
         col = position.x
+
         while len(self.buffer) <= row:
             self.buffer.append("")
+
         line = self.buffer[row]
-        if len(line) < col:
-            line = line.ljust(col)
-        line = (
-            line[:col] + new_str.markup
-            if isinstance(new_str, Text)
-            else new_str + line[col + n :]
-        )
-        print(line)
-        self.buffer[row] = line
+        line_text = Text.from_markup(line) if line else Text("")
+
+        current_len = len(line_text.plain)
+        if current_len < col:
+            line_text = line_text + Text(" " * (col - current_len))
+        if len(line_text.plain) < col + n:
+            line_text = line_text + Text(" " * (col + n - len(line_text.plain)))
+
+        parts = line_text.divide([col, col + n])
+        result = parts[0] + middle + parts[2]
+        self.buffer[row] = result.markup
 
     def read(self) -> str:
         return "\n".join(self.buffer)
