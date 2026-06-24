@@ -11,3 +11,4 @@ class ScreenController(EventBus):
 
     def redraw(self, data: str):
         os.system("cls")
+        self.console.print(data)
