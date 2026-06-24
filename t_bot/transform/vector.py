@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from typing import Union, Tuple
 
+
 class Vector2:
     __slots__ = ("x", "y")
 
@@ -239,8 +240,8 @@ class Vector2:
     def __hash__(self) -> int:
         return hash((self.x, self.y))
 
+
 class Vector2i:
-    
     __slots__ = ("x", "y")
 
     def __init__(self, x: float = 0, y: float = 0) -> None:
@@ -288,10 +289,10 @@ class Vector2i:
 
     @property
     def normalized(self) -> "Vector2":
-        l = self.length
-        if l == 0.0:
+        length = self.length
+        if length == 0.0:
             return Vector2.zero()
-        return Vector2(self.x / l, self.y / l)
+        return Vector2(self.x / length, self.y / length)
 
     @property
     def tuple(self) -> Tuple[int, int]:
@@ -351,7 +352,7 @@ class Vector2i:
         return self.__mul__(other)
 
     def __truediv__(self, other) -> "Vector2":
-                if isinstance(other, (Vector2i, Vector2)):
+        if isinstance(other, (Vector2i, Vector2)):
             return Vector2(self.x / other.x, self.y / other.y)
         if isinstance(other, (int, float)):
             return Vector2(self.x / other, self.y / other)
@@ -466,7 +467,7 @@ class Vector2i:
         return int(dx * dx + dy * dy)
 
     def manhattan_distance(self, other: "Vector2i") -> int:
-                return abs(self.x - other.x) + abs(self.y - other.y)
+        return abs(self.x - other.x) + abs(self.y - other.y)
 
     def angle(self) -> float:
         return math.atan2(float(self.y), float(self.x))
@@ -482,6 +483,7 @@ class Vector2i:
 
     def __hash__(self) -> int:
         return hash((self.x, self.y))
+
 
 Vec2 = Vector2
 Vec2i = Vector2i

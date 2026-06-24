@@ -7,10 +7,11 @@ class WorldRenderer(BaseRenderer):
         super().__init__()
         self.size: Vector2i = Vector2i.one() * 20
 
-    def render(self) -> str:
-        result = ""
-        result += f"*{'**' * self.size.x}*"
-        return result
+    def render(self) -> None:
+        self.add_line(f"*{'**' * self.size.x}*")
+        for _ in range(self.size.y):
+            self.add_line(f"*{'  ' * self.size.x}*")
+        self.add_line(f"*{'**' * self.size.x}*")
 
 
 class GameWorld:

@@ -1,12 +1,16 @@
 from abc import ABC, abstractmethod
 
-from t_bot.engine.renderer.structs import BaseRenderable
-
 
 class BaseRenderer(ABC):
     def __init__(self) -> None:
-        self.targets: list[BaseRenderable] = []
+        self.buffer: list[str] = []
 
     @abstractmethod
-    def render(self) -> str:
+    def render(self) -> None:
         pass
+
+    def add_line(self, line: str) -> None:
+        self.buffer.append(line)
+
+    def read(self) -> str:
+        return "\n".join(self.buffer)
