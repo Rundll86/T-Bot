@@ -6,12 +6,12 @@ from t_bot.engine.world import GameWorld, WorldRenderer
 class TBot:
     def __init__(self) -> None:
         self.world = GameWorld()
-        self.world_renderer = WorldRenderer()
+        self.world.init()
+        self.world_renderer = WorldRenderer(self.world)
         self.console = Console(highlight=False)
 
     def print(self):
-        self.console.print(self.world_renderer.read())
+        self.console.print(self.world_renderer.refresh())
 
     def start(self):
-        self.world_renderer.render()
         self.print()

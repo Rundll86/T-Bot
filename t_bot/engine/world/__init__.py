@@ -1,18 +1,31 @@
+from t_bot.content.entity.player import PlayerEntity
 from t_bot.engine.renderer import BaseRenderer
+from t_bot.engine.world.target import BaseWorldTarget
 from t_bot.transform.vector import Vector2i
 
 
-class WorldRenderer(BaseRenderer):
+class GameWorld:
     def __init__(self) -> None:
+        self.targets: list[BaseWorldTarget] = []
+
+    def init(self):
+        self.targets.append(PlayerEntity())
+
+
+class WorldRenderer(BaseRenderer):
+    def __init__(self, world: GameWorld) -> None:
         super().__init__()
         self.size: Vector2i = Vector2i.one() * 20
+        self.world = world
 
     def render(self) -> None:
         self.add_line(f"*{'**' * self.size.x}*")
         for _ in range(self.size.y):
             self.add_line(f"*{'  ' * self.size.x}*")
         self.add_line(f"*{'**' * self.size.x}*")
-
-
-class GameWorld:
-    pass
+        for target in self.world.targets:
+            self.replace_at(
+                target.position + Vector2i.one(),
+                target.render(),
+                target.space_count,
+            )
