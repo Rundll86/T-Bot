@@ -1,5 +1,4 @@
-from abc import abstractmethod
-
+from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer.structs import BaseRenderable
 from t_bot.transform.vector import Vector2i
 
@@ -11,15 +10,19 @@ class BaseWorldTarget(BaseRenderable):
         self.texture: str = texture
         self.background: str = "black"
         self.foreground: str = "white"
+        self.register_events()
+
+    def register_events(self):
+        self.join_world = EventSubscriber()
 
     def render(self) -> str:
         return f"[{self.foreground} on {self.background}]{self.texture}[/{self.foreground} on {self.background}]"
 
 
 class BaseCollider(BaseWorldTarget):
-    @abstractmethod
-    def collide_with(self, other: "BaseCollider"):
-        pass
+    def register_events(self):
+        super().register_events()
+        self.collided_with = EventSubscriber()
 
 
 class BaseEntity(BaseCollider):
