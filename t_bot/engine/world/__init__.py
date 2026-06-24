@@ -41,7 +41,7 @@ class WorldRenderer(BaseRenderer):
         self.add_line(f"*{'**' * self.size.x}*")
         for target in self.world.targets:
             self.replace_at(
-                target.position + Vector2i.one(),
+                (target.position * Vector2i(target.space_count, 1)) + Vector2i.one(),
                 target.render(),
                 target.space_count,
             )

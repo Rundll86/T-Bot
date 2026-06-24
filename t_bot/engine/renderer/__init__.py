@@ -16,6 +16,9 @@ class BaseRenderer(ABC):
     def add_line(self, line: str) -> None:
         self.buffer.append(line)
 
+    def clear(self) -> None:
+        self.buffer.clear()
+
     def replace_at(
         self,
         position: Vector2i,
@@ -53,5 +56,6 @@ class BaseRenderer(ABC):
         return "\n".join(self.buffer)
 
     def redraw(self) -> str:
+        self.clear()
         self.render()
         return self.read()
