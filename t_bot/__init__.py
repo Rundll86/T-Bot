@@ -1,17 +1,25 @@
-from rich.console import Console
-
+from t_bot.content.entities.player import PlayerEntity
+from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.controller.screen_controller import ScreenController
 from t_bot.engine.world import GameWorld, WorldRenderer
 
 
 class TBot:
     def __init__(self) -> None:
+        self.game_controller = GameController()
+        self.screen_controller = ScreenController()
         self.world = GameWorld()
-        self.world.init()
         self.world_renderer = WorldRenderer(self.world)
-        self.console = Console(highlight=False)
-
-    def print(self):
-        self.console.print(self.world_renderer.refresh())
 
     def start(self):
-        self.print()
+        self.world.add_target(PlayerEntity())
+
+    def redraw(self):
+        self.screen_controller.redraw(self.world_renderer.redraw())
+
+    def loop(self):
+        self.redraw()
+        while True:
+            input_char = self.game_controller.wait_input()
+            self.world.send_input(input_char)
+            self.redraw()

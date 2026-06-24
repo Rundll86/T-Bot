@@ -18,8 +18,18 @@ class PlayerEntity(BaseEntity):
         self.style = self.style + Style()
 
     def register_events(self):
-        super().register_events()
-
         @self.join_world.subscribe
         def join_world(world: "GameWorld"):
             world.add_target(self.sword)
+
+        @self.input.subscribe
+        def input(char: str):
+            match char:
+                case "w":
+                    self.position.y -= 1
+                case "s":
+                    self.position.y += 1
+                case "a":
+                    self.position.x -= 1
+                case "d":
+                    self.position.x += 1

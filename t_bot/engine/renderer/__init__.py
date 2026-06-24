@@ -52,6 +52,6 @@ class BaseRenderer(ABC):
     def read(self) -> str:
         return "\n".join(self.buffer)
 
-    def refresh(self) -> str:
+    def redraw(self) -> str:
         self.render()
         return self.read()

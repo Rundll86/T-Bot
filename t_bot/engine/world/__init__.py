@@ -1,20 +1,31 @@
-from t_bot.content.entities.player import PlayerEntity
+from t_bot.engine.event.event_bus import EventBus
+from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
 from t_bot.engine.world.target import BaseWorldTarget
 from t_bot.transform.vector import Vector2i
 
 
-class GameWorld:
+class GameWorld(EventBus):
     def __init__(self) -> None:
         self.targets: list[BaseWorldTarget] = []
 
-    def init(self):
-        self.add_target(PlayerEntity())
+        self.input = EventSubscriber()
 
     def add_target(self, target: BaseWorldTarget) -> BaseWorldTarget:
         self.targets.append(target)
         target.join_world.emit(self)
         return target
+
+    def send_input(self, char: str) -> None:
+        self.input.emit(char)
+
+    def register_event(self):
+        super().register_event()
+
+        @self.input.subscribe
+        def input(char: str):
+            for target in self.targets:
+                target.input.emit(char)
 
 
 class WorldRenderer(BaseRenderer):
