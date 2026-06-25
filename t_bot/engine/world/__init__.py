@@ -15,10 +15,9 @@ class GameWorld(EventBus):
         self.targets: list[BaseWorldTarget] = []
 
     def add_target(self, *targets: BaseWorldTarget) -> tuple[BaseWorldTarget, ...]:
-        self.targets.extend(targets)
         for target in targets:
-            target.world = self
             target.join_world.emit(self)
+            self.targets.append(target)
         return targets
 
     def register_events(self):
@@ -39,8 +38,8 @@ class GameWorld(EventBus):
 
         @self.target_died.subscribe
         def target_died(target: BaseWorldTarget):
+            print(target)
             while target in self.targets:
-                print(target)
                 self.targets.remove(target)
 
 

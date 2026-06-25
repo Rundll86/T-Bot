@@ -7,11 +7,11 @@ from t_bot.engine.world import GameWorld, WorldRenderer
 
 class TBot(EventBus):
     def __init__(self) -> None:
-        self.game_controller = GameController()
-        self.screen_controller = ScreenController()
         super().__init__()
         self.world = GameWorld()
         self.world_renderer = WorldRenderer(self.world)
+        self.game_controller = GameController(self.world)
+        self.screen_controller = ScreenController()
 
     def start(self):
         self.world.add_target(PlayerEntity())

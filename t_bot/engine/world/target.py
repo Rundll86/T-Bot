@@ -3,6 +3,7 @@ import copy
 from rich.style import Style
 from rich.text import Text
 
+from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer.structs import BaseRenderable
@@ -12,8 +13,6 @@ from t_bot.transform.vector import Vector2i
 
 class BaseWorldTarget(BaseRenderable, EventBus):
     def __init__(self, texture: str) -> None:
-        from t_bot.engine.world import GameWorld
-
         self.join_world = EventSubscriber()
         self.input = EventSubscriber()
         self.aged = EventSubscriber()
@@ -24,7 +23,6 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.background: str = "black"
         self.foreground: str = "white"
         self.direction: Direction = Direction.UP
-        self.world: GameWorld = GameWorld()
         self.timelifed: int = 0
 
     def render(self) -> Text:
@@ -41,6 +39,10 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         def input(char: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
+
+    @property
+    def world(self):
+        return GameController.world
 
 
 class BaseCollider(BaseWorldTarget):
@@ -72,7 +74,6 @@ class BaseBullet(BaseCollider):
 
         @self.aged.subscribe
         def aged(timelifed: int):
-            print(timelifed, self.lifetime)
             if self.lifetime > 0:
                 if timelifed >= self.lifetime:
                     self.world.target_died.emit(self)
