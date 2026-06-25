@@ -26,7 +26,7 @@ class GameWorld(EventBus):
     def register_events(self):
         super().register_events()
 
-        @self.input.subscribe
+        @self.subscribe(self.input)
         def input(char: str):
             if char == "e":
                 sys.exit(0)
@@ -38,10 +38,11 @@ class GameWorld(EventBus):
                                 if target.position == next_target.position:
                                     target.collided_with.emit(next_target)
 
-        @self.target_died.subscribe
+        @self.subscribe(self.target_died)
         def target_died(target: BaseWorldTarget):
             while target in self.targets:
                 self.targets.remove(target)
+            del target
 
 
 class WorldRenderer(BaseRenderer):

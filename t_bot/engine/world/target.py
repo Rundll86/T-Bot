@@ -34,7 +34,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def register_events(self):
         super().register_events()
 
-        @self.world.input.subscribe
+        @self.subscribe(self.world.input)
         def input(char: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
@@ -67,11 +67,11 @@ class BaseBullet(BaseCollider):
     def register_events(self):
         super().register_events()
 
-        @self.collided_with.subscribe
+        @self.subscribe(self.collided_with)
         def collided_with(other: BaseCollider):
             pass
 
-        @self.aged.subscribe
+        @self.subscribe(self.aged)
         def aged(timelifed: int):
             if self.lifetime > 0:
                 if timelifed >= self.lifetime:

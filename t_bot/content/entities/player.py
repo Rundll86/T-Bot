@@ -29,11 +29,11 @@ class PlayerEntity(BaseEntity):
         )
 
     def register_events(self):
-        @self.join_world.subscribe
+        @self.subscribe(self.join_world)
         def join_world(world: "GameWorld"):
             world.add_target(self.sword)
 
-        @self.world.input.subscribe
+        @self.subscribe(self.world.input)
         def input(char: str):
             if char in input_to_direction:
                 direction = input_to_direction[char]
