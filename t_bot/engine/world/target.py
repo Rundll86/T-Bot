@@ -41,7 +41,6 @@ class BaseWorldTarget(BaseRenderable, EventBus):
 
     @property
     def world(self):
-        print("b")
         return GameController.world
 
 
@@ -103,7 +102,12 @@ class BulletGroup:
 
         new_space: list[BaseBullet] = []
         for bullet in self.base_space:
-            bullet_copy = copy.copy(bullet)
-            bullet_copy.position = rotate(bullet.position) + base_position
-            new_space.append(bullet_copy)
+            bullet_cloned = copy.copy(bullet)
+            bullet_cloned.join_world = EventSubscriber()
+            bullet_cloned.aged = EventSubscriber()
+            bullet_cloned.collided_with = EventSubscriber()
+            bullet_cloned.register_events()
+            bullet_cloned.timelifed = 0
+            bullet_cloned.position = rotate(bullet.position) + base_position
+            new_space.append(bullet_cloned)
         return new_space

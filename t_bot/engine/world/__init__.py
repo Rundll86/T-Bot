@@ -40,9 +40,7 @@ class GameWorld(EventBus):
 
         @self.target_died.subscribe
         def target_died(target: BaseWorldTarget):
-            print(target)
             while target in self.targets:
-                print("delete", target)
                 self.targets.remove(target)
 
 
