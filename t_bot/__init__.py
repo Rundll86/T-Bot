@@ -13,13 +13,6 @@ class TBot(EventBus):
         self.world = GameWorld()
         self.world_renderer = WorldRenderer(self.world)
 
-    def register_events(self):
-        super().register_events()
-
-        @self.game_controller.input.subscribe
-        def input(char: str):
-            self.world.input.emit(char)
-
     def start(self):
         self.world.add_target(PlayerEntity())
 
@@ -31,4 +24,5 @@ class TBot(EventBus):
         while True:
             input_char = self.game_controller.wait_input()
             print(input_char)
+            self.world.input.emit(input_char)
             self.redraw()

@@ -3,12 +3,22 @@ from typing import TYPE_CHECKING
 from rich.style import Style
 
 from t_bot.content.bullets.player_sword import PlayerSword
-from t_bot.engine.world.target import BaseEntity
+from t_bot.content.bullets.player_sword_light import PlayerSwordLight
+from t_bot.engine.world.target import BaseEntity, BulletGroup
 from t_bot.transform.vector import Vector2i
 from t_bot.transform.direction import direction_to_vector, input_to_direction
 
 if TYPE_CHECKING:
     from t_bot.engine.world import GameWorld
+
+attack1 = BulletGroup(
+    [
+        PlayerSwordLight().set_position(Vector2i(1, 1)),
+        PlayerSwordLight().set_position(Vector2i(1, 0)),
+        PlayerSwordLight().set_position(Vector2i(1, -1)),
+        PlayerSwordLight().set_position(Vector2i(0, -1)),
+    ]
+)
 
 
 class PlayerEntity(BaseEntity):
@@ -38,4 +48,9 @@ class PlayerEntity(BaseEntity):
                         delta = self.sword.position - self.position
                         match self.attack_counter % 3:
                             case 0:
-                                pass
+                                self.world.add_target(
+                                    *attack1.fetch(
+                                        self.direction,
+                                        self.position,
+                                    )
+                                )
