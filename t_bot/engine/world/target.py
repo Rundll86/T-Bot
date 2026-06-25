@@ -41,6 +41,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
 
     @property
     def world(self):
+        print("b")
         return GameController.world
 
 

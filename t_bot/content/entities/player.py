@@ -11,15 +11,6 @@ from t_bot.transform.direction import direction_to_vector, input_to_direction
 if TYPE_CHECKING:
     from t_bot.engine.world import GameWorld
 
-attack1 = BulletGroup(
-    [
-        PlayerSwordLight().set_position(Vector2i(1, 1)),
-        PlayerSwordLight().set_position(Vector2i(1, 0)),
-        PlayerSwordLight().set_position(Vector2i(1, -1)),
-        PlayerSwordLight().set_position(Vector2i(0, -1)),
-    ]
-)
-
 
 class PlayerEntity(BaseEntity):
     def __init__(self) -> None:
@@ -28,13 +19,21 @@ class PlayerEntity(BaseEntity):
         self.sword.position += Vector2i(1, 0)
         self.style = self.style + Style()
         self.attack_counter = 0
+        self.attack1 = BulletGroup(
+            [
+                PlayerSwordLight().set_position(Vector2i(1, 1)),
+                PlayerSwordLight().set_position(Vector2i(1, 0)),
+                PlayerSwordLight().set_position(Vector2i(1, -1)),
+                PlayerSwordLight().set_position(Vector2i(0, -1)),
+            ]
+        )
 
     def register_events(self):
         @self.join_world.subscribe
         def join_world(world: "GameWorld"):
             world.add_target(self.sword)
 
-        @self.input.subscribe
+        @self.world.input.subscribe
         def input(char: str):
             if char in input_to_direction:
                 direction = input_to_direction[char]
@@ -49,7 +48,7 @@ class PlayerEntity(BaseEntity):
                         match self.attack_counter % 3:
                             case 0:
                                 self.world.add_target(
-                                    *attack1.fetch(
+                                    *self.attack1.fetch(
                                         self.direction,
                                         self.position,
                                     )

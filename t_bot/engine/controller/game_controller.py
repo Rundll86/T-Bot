@@ -10,10 +10,6 @@ if TYPE_CHECKING:
 class GameController(EventBus):
     world: "GameWorld"
 
-    def __init__(self, world: "GameWorld") -> None:
-        self.world = world
-        GameController.world = world
-
     def wait_input(self) -> str:
         char = msvcrt.getch().decode("ascii")
         return char

@@ -10,7 +10,7 @@ class TBot(EventBus):
         super().__init__()
         self.world = GameWorld()
         self.world_renderer = WorldRenderer(self.world)
-        self.game_controller = GameController(self.world)
+        self.game_controller = GameController()
         self.screen_controller = ScreenController()
 
     def start(self):

@@ -1,5 +1,6 @@
 import sys
 
+from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
@@ -9,10 +10,12 @@ from t_bot.transform.vector import Vector2i
 
 class GameWorld(EventBus):
     def __init__(self) -> None:
+        GameController.world = self
+        print("a")
         self.input = EventSubscriber()
         self.target_died = EventSubscriber()
-        super().__init__()
         self.targets: list[BaseWorldTarget] = []
+        super().__init__()
 
     def add_target(self, *targets: BaseWorldTarget) -> tuple[BaseWorldTarget, ...]:
         for target in targets:
