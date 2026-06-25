@@ -16,9 +16,6 @@ class GameWorld(EventBus):
         target.join_world.emit(self)
         return target
 
-    def send_input(self, char: str) -> None:
-        self.input.emit(char)
-
     def register_events(self):
         super().register_events()
 
@@ -36,12 +33,17 @@ class WorldRenderer(BaseRenderer):
 
     def render(self) -> None:
         self.add_line(f"*{'**' * self.size.x}*")
-        for _ in range(self.size.y):
-            self.add_line(f"*{'  ' * self.size.x}*")
+        for y in range(self.size.y):
+            self.add_line("*")
+            for x in range(self.size.y):
+                target: BaseWorldTarget | None = None
+                for t in self.world.targets:
+                    if t.position == Vector2i(x, y):
+                        target = t
+                if target is not None:
+                    self.append_current(target.texture)
+                else:
+                    self.append_current("  ")
+            self.append_current("*")
         self.add_line(f"*{'**' * self.size.x}*")
-        for target in self.world.targets:
-            self.replace_at(
-                (target.position * Vector2i(target.space_count, 1)) + Vector2i.one(),
-                target.render(),
-                target.space_count,
-            )
+        pass

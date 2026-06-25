@@ -5,6 +5,7 @@ from rich.style import Style
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.engine.world.target import BaseEntity
 from t_bot.transform.vector import Vector2i
+from t_bot.transform.direction import direction_to_vector, input_to_direction
 
 if TYPE_CHECKING:
     from t_bot.engine.world import GameWorld
@@ -24,12 +25,7 @@ class PlayerEntity(BaseEntity):
 
         @self.input.subscribe
         def input(char: str):
-            match char:
-                case "w":
-                    self.position.y -= 1
-                case "s":
-                    self.position.y += 1
-                case "a":
-                    self.position.x -= 1
-                case "d":
-                    self.position.x += 1
+            direction = input_to_direction[char]
+            delta = direction_to_vector[direction]
+            self.position += delta
+            self.direction = direction
