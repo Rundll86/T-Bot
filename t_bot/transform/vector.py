@@ -25,11 +25,11 @@ class Vector2:
 
     @classmethod
     def up(cls) -> "Vector2":
-        return cls(0.0, 1.0)
+        return cls(0.0, -1.0)
 
     @classmethod
     def down(cls) -> "Vector2":
-        return cls(0.0, -1.0)
+        return cls(0.0, 1.0)
 
     @classmethod
     def left(cls) -> "Vector2":
@@ -217,9 +217,9 @@ class Vector2:
     def lerp(self, other: "Vector2", t: float) -> "Vector2":
         return self + (other - self) * t
 
-    def rotate(self, angle: float) -> "Vector2":
-        cos_a = math.cos(angle)
-        sin_a = math.sin(angle)
+    def rotated(self, rad: float) -> "Vector2":
+        cos_a = math.cos(rad)
+        sin_a = math.sin(rad)
         return Vector2(
             self.x * cos_a - self.y * sin_a,
             self.x * sin_a + self.y * cos_a,
@@ -262,11 +262,11 @@ class Vector2i:
 
     @classmethod
     def up(cls) -> "Vector2i":
-        return cls(0, 1)
+        return cls(0, -1)
 
     @classmethod
     def down(cls) -> "Vector2i":
-        return cls(0, -1)
+        return cls(0, 1)
 
     @classmethod
     def left(cls) -> "Vector2i":
@@ -278,6 +278,12 @@ class Vector2i:
 
     def to_vector2(self) -> "Vector2":
         return Vector2(float(self.x), float(self.y))
+
+    def rotated_right(self) -> "Vector2i":
+        return Vector2i(self.y, -self.x)
+
+    def rotated_left(self) -> "Vector2i":
+        return Vector2i(-self.y, self.x)
 
     @property
     def length_squared(self) -> int:

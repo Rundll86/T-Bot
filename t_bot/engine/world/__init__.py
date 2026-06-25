@@ -1,7 +1,7 @@
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
-from t_bot.engine.world.target import BaseWorldTarget
+from t_bot.engine.world.target import BaseCollider, BaseWorldTarget
 from t_bot.transform.vector import Vector2i
 
 
@@ -23,6 +23,11 @@ class GameWorld(EventBus):
         def input(char: str):
             for target in self.targets:
                 target.input.emit(char)
+                if isinstance(target, BaseCollider):
+                    for next_target in self.targets:
+                        if isinstance(next_target, BaseCollider):
+                            if target.position == next_target.position:
+                                target.collided_with.emit(next_target)
 
 
 class WorldRenderer(BaseRenderer):

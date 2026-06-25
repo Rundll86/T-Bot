@@ -38,4 +38,21 @@ class BaseEntity(BaseCollider):
 
 
 class BaseBullet(BaseCollider):
-    pass
+    def __init__(self, penetrate_count: int, texture: str) -> None:
+        super().__init__(texture)
+        self.penetrate_count = penetrate_count
+
+    def register_events(self):
+        super().register_events()
+
+        @self.collided_with.subscribe
+        def collided_with():
+            pass
+
+
+class BulletGroup:
+    def __init__(self, base_space: list[BaseBullet]) -> None:
+        self.base_space = base_space
+
+    def fetch(self, direction: Direction):
+        pass
