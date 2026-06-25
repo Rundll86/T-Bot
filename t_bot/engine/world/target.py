@@ -18,14 +18,17 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
-        self.style = Style(color="white", bgcolor="black")
+        self.style = Style()
         self.background: str = "black"
         self.foreground: str = "white"
         self.direction: Direction = Direction.UP
         self.timelifed: int = 0
 
     def render(self) -> Text:
-        return Text(self.texture, style=self.style)
+        return Text(
+            self.texture,
+            style=Style(color=self.foreground, bgcolor=self.background) + self.style,
+        )
 
     def set_position(self, newpos: Vector2i):
         self.position = newpos

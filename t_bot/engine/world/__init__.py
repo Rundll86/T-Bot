@@ -11,7 +11,6 @@ from t_bot.transform.vector import Vector2i
 class GameWorld(EventBus):
     def __init__(self) -> None:
         GameController.world = self
-        print("a")
         self.input = EventSubscriber()
         self.target_died = EventSubscriber()
         self.targets: list[BaseWorldTarget] = []
