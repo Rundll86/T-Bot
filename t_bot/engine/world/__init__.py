@@ -29,7 +29,6 @@ class GameWorld(EventBus):
                 sys.exit(0)
             else:
                 for target in self.targets:
-                    target.input.emit(char)
                     if isinstance(target, BaseCollider):
                         for next_target in self.targets:
                             if isinstance(next_target, BaseCollider):
@@ -40,6 +39,7 @@ class GameWorld(EventBus):
         def target_died(target: BaseWorldTarget):
             print(target)
             while target in self.targets:
+                print("delete", target)
                 self.targets.remove(target)
 
 

@@ -14,7 +14,6 @@ from t_bot.transform.vector import Vector2i
 class BaseWorldTarget(BaseRenderable, EventBus):
     def __init__(self, texture: str) -> None:
         self.join_world = EventSubscriber()
-        self.input = EventSubscriber()
         self.aged = EventSubscriber()
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
@@ -35,7 +34,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def register_events(self):
         super().register_events()
 
-        @self.input.subscribe
+        @self.world.input.subscribe
         def input(char: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
