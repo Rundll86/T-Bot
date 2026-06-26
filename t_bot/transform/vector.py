@@ -231,10 +231,12 @@ class Vector2:
     def copy(self) -> "Vector2":
         return Vector2(self.x, self.y)
 
+    def round(self) -> "Vector2i":
+        return Vector2i(round(self.x), round(self.y))
+
     def clamp(
         self, x_min: float, x_max: float, y_min: float, y_max: float
     ) -> "Vector2":
-        """返回新向量，x 限制在 [x_min, x_max]，y 限制在 [y_min, y_max]。"""
         return Vector2(
             max(x_min, min(self.x, x_max)),
             max(y_min, min(self.y, y_max)),
@@ -494,7 +496,6 @@ class Vector2i:
         return Vector2i(self.x, self.y)
 
     def clamp(self, x_min: int, x_max: int, y_min: int, y_max: int) -> "Vector2i":
-        """返回新向量，x 限制在 [x_min, x_max]，y 限制在 [y_min, y_max]。"""
         return Vector2i(
             max(x_min, min(self.x, x_max)),
             max(y_min, min(self.y, y_max)),

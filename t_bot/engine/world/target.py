@@ -44,7 +44,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         super().register_events()
 
         @self.subscribe(RoundController.next_round)
-        def next_round():
+        def next_round(input: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
 
@@ -121,6 +121,10 @@ class BaseEntity(BaseCollider):
     def public_die(self):
         GameLogger.add_log(f"{self.display_name}已被打败！")
         return super().public_die()
+
+    def follow_player(self, speed: int = 1):
+        delta = (GameController.player.position - self.position).normalized.round()
+        self.move(delta * speed)
 
 
 class BaseBullet(BaseCollider):

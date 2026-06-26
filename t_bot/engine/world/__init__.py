@@ -48,7 +48,7 @@ class GameWorld(EventBus):
                 sys.exit(0)
 
         @self.subscribe(RoundController.next_round)
-        def next_round():
+        def next_round(input: str):
             self.detect_collision()
 
         @self.subscribe(self.target_died)

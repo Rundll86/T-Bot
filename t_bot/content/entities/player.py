@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING
-
 from rich.style import Style
-
-
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
 from t_bot.engine.controller.game_controller import GameController
@@ -41,8 +38,10 @@ class PlayerEntity(BaseEntity):
         )
 
     def register_events(self):
-        @self.subscribe(self.world.input)
-        def input(char: str):
+        from t_bot import RoundController
+
+        @self.subscribe(RoundController.next_round)
+        def next_round(char: str):
             if char in input_to_direction:
                 direction = input_to_direction[char]
                 delta = direction_to_vector[direction]

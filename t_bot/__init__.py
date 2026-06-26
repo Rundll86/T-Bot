@@ -35,5 +35,5 @@ class TBot(EventBus):
         while True:
             input_char = self.game_controller.wait_input()
             self.world.input.emit(input_char)
-            RoundController.next_round.emit()
+            RoundController.next_round.emit(input_char)
             self.redraw()
