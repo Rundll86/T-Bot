@@ -21,6 +21,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def __init__(self, texture: str) -> None:
         self.join_world = EventSubscriber()
         self.aged = EventSubscriber()
+        self.my_turn = EventSubscriber()
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
@@ -29,6 +30,8 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.foreground: Color = Color.from_rgb(255, 255, 255)
         self.direction: Direction = Direction.UP
         self.timelifed: int = 0
+        self.speed: float = 1
+        self.action_progress: float = 0
 
     def render(self) -> Text:
         return Text(
@@ -47,6 +50,10 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         def next_round(input: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
+            self.action_progress += self.speed
+            if self.action_progress >= 1:
+                self.action_progress -= 1
+                self.my_turn.emit()
 
     def public_die(self):
         self.world.target_died.emit(self)

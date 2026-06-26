@@ -3,6 +3,7 @@ from rich.style import Style
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
 from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.world.target import BaseEntity, BulletGroup
 from t_bot.transform.vector import Vector2i
 from t_bot.transform.direction import direction_to_vector, input_to_direction
@@ -38,10 +39,11 @@ class PlayerEntity(BaseEntity):
         )
 
     def register_events(self):
-        from t_bot import RoundController
+        super().register_events()
 
-        @self.subscribe(RoundController.next_round)
-        def next_round(char: str):
+        @self.subscribe(self.my_turn)
+        def my_turn():
+            char = RoundController.last_input
             if char in input_to_direction:
                 direction = input_to_direction[char]
                 delta = direction_to_vector[direction]
