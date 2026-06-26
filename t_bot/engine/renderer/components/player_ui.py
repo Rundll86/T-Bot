@@ -32,7 +32,7 @@ class PlayerUIRenderer(BaseRenderer):
         # 玩家状态
         self.auto_replace(
             Vector2i(3, 2),
-            f"生命值 <{GameController.player.current_health}/{GameController.player.max_health}>",
+            f"生命值 <{GameController.player.current_health:.0f}/{GameController.player.max_health:.0f}>",
         )
         self.replace_at(
             Vector2i(3, 3),
