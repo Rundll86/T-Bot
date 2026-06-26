@@ -7,7 +7,6 @@ from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
-from t_bot.engine.controller.wave_controller import WaveController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.event.logger import GameLogger
@@ -146,6 +145,8 @@ class BaseEntity(BaseCollider):
 
         @self.subscribe(self.die)
         def die():
+            from t_bot.engine.controller.wave_controller import WaveController
+
             WaveController.judge_next()
 
     def take_damage(self, dmg: float, crit: bool) -> float:
