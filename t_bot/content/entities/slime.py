@@ -1,5 +1,7 @@
 import random
 
+from t_bot.content.bullets.slime_sprint import SlimeSprintBullet
+from t_bot.content.entities.player import direction_to_vector
 from t_bot.engine.world.target import BaseEntity
 
 
@@ -14,3 +16,12 @@ class SlimeEntity(BaseEntity):
         @self.subscribe(self.my_turn)
         def my_turn():
             self.follow_player()
+            match self.is_player_crossed():
+                case True, direction:
+                    self.direction = direction
+                    self.world.add_bullet(
+                        self,
+                        SlimeSprintBullet().set_position(
+                            self.position + direction_to_vector[direction] * 3
+                        ),
+                    )

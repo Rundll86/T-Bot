@@ -1,4 +1,5 @@
 import copy
+from typing import Literal
 
 from rich.color import Color
 from rich.style import Style
@@ -167,6 +168,22 @@ class BaseEntity(BaseCollider):
     def follow_player(self, speed: int = 1):
         delta = (GameController.player.position - self.position).normalized.round()
         self.move(delta * speed)
+
+    def is_player_crossed(
+        self,
+    ) -> tuple[Literal[True], Direction] | tuple[Literal[False], None]:
+        player = GameController.player
+        if player.position.x == self.position.x:
+            if player.position.y < self.position.y:
+                return True, Direction.UP
+            elif player.position.y > self.position.y:
+                return True, Direction.DOWN
+        elif player.position.y == self.position.y:
+            if player.position.x < self.position.x:
+                return True, Direction.LEFT
+            elif player.position.x > self.position.x:
+                return True, Direction.RIGHT
+        return False, None
 
 
 class BaseBullet(BaseCollider):

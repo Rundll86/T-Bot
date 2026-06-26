@@ -4,7 +4,6 @@ from rich.style import Style
 from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
-from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
@@ -36,7 +35,9 @@ class GameWorld(EventBus):
         return targets
 
     def add_bullet(
-        self, launcher: BaseEntity, *bullets: BaseBullet
+        self,
+        launcher: BaseEntity,
+        *bullets: BaseBullet,
     ) -> tuple[BaseBullet, ...]:
         for bullet in bullets:
             bullet.launcher = launcher
