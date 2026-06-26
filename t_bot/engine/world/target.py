@@ -174,7 +174,11 @@ class BaseEntity(BaseCollider):
         return total_dmg
 
     def public_die(self):
+        from t_bot.engine.controller.wave_controller import WaveController
+
         GameLogger.add_log(Text(f"{self.display_name}已被打败！", style="#00ff00"))
+        if not self.is_player:
+            GameController.got_score += WaveController.current_wave
         return super().public_die()
 
     def follow_player(self, speed: int = 1):

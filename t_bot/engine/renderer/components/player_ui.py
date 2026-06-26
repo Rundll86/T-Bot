@@ -3,6 +3,7 @@ from rich.style import Style
 from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.controller.wave_controller import WaveController
 from t_bot.engine.event.logger import GameLogger
 from t_bot.engine.renderer import BaseRenderer
 from t_bot.engine.util.character import get_space_count
@@ -16,6 +17,7 @@ class PlayerUIRenderer(BaseRenderer):
         self.show_log_count = 3
 
     def render(self) -> None:
+        # 框框
         # 玩家UI
         self.add_line("-" * (self.size + 2))
         for _ in range(8):
@@ -29,6 +31,10 @@ class PlayerUIRenderer(BaseRenderer):
         for _ in range(self.show_log_count):
             self.add_line("|")
         self.add_line("-" * (self.size + 2))
+        # 分数&波次
+        self.add_line("|")
+        self.add_line("-" * (self.size + 2))
+        # 信息
         # 玩家状态
         self.auto_replace(
             Vector2i(3, 2),
@@ -76,3 +82,8 @@ class PlayerUIRenderer(BaseRenderer):
         for log in GameLogger.read(self.show_log_count):
             self.replace_at(Vector2i(3, 15 + i), log)
             i += 1
+        # 分数&波次
+        self.replace_at(
+            Vector2i(3, 16 + i),
+            f"第 {WaveController.current_wave} 波 | 分数 {GameController.got_score}",
+        )

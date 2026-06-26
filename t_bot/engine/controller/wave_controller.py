@@ -54,5 +54,6 @@ class WaveController:
     def judge_next(cls):
         if GameController.world.enemy_count > 0:
             return
+        cls.current_wave += 1
         entities = cls.spawn_current()
         GameController.world.add_target(*entities)
