@@ -1,6 +1,7 @@
 import random
 
 from t_bot.content.bullets.slime_sprint import SlimeSprintBullet
+from t_bot.content.entities.flower import FlowerEntity
 from t_bot.content.entities.player import direction_to_vector
 from t_bot.engine.world.target import BaseEntity
 
@@ -27,3 +28,7 @@ class SlimeEntity(BaseEntity):
                                     self.position + direction_to_vector[direction] * i
                                 ),
                             )
+
+        @self.subscribe(self.die)
+        def die():
+            self.world.add_target(FlowerEntity())

@@ -25,6 +25,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.join_world = EventSubscriber()
         self.aged = EventSubscriber()
         self.my_turn = EventSubscriber()
+        self.die = EventSubscriber()
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
@@ -62,6 +63,8 @@ class BaseWorldTarget(BaseRenderable, EventBus):
 
     def public_die(self):
         self.world.target_died.emit(self)
+        self.die.emit()
+        self.unsubscribe_all()
 
     def move(self, delta: Vector2i):
         old_pos = self.position
@@ -143,7 +146,9 @@ class BaseEntity(BaseCollider):
     def take_damage(self, dmg: float, crit: bool) -> float:
         total_dmg = damage_float(dmg)
         self.current_health -= total_dmg
-        if not self.is_player:
+        if self.is_player:
+            GameLogger.add_log(Text(f"受到了{total_dmg}点伤害！", style="#ff0000"))
+        else:
             GameController.focus_enemy = self
             if crit:
                 GameLogger.add_log(
