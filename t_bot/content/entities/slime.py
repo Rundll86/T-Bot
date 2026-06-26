@@ -16,13 +16,14 @@ class SlimeEntity(BaseEntity):
         @self.subscribe(self.my_turn)
         def my_turn():
             self.follow_player()
-            match self.is_player_crossed():
-                case True, direction:
-                    self.direction = direction
-                    for i in range(3):
-                        self.world.add_bullet(
-                            self,
-                            SlimeSprintBullet().set_position(
-                                self.position + direction_to_vector[direction] * i
-                            ),
-                        )
+            if self.timelifed % 2 == 0:
+                match self.is_player_crossed():
+                    case True, direction:
+                        self.direction = direction
+                        for i in range(3):
+                            self.world.add_bullet(
+                                self,
+                                SlimeSprintBullet().set_position(
+                                    self.position + direction_to_vector[direction] * i
+                                ),
+                            )

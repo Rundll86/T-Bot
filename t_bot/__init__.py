@@ -21,7 +21,7 @@ class TBot(EventBus):
 
     def start(self):
         self.world.add_target(PlayerEntity().set_position(Vector2i(5, 5)))
-        for _ in range(5):
+        for _ in range(1):
             self.world.add_target(
                 SlimeEntity().set_position(Vector2i(randint(1, 8), randint(1, 8)))
             )
