@@ -21,6 +21,7 @@ class BaseEffect(ABC, EventBus):
 
     def apply(self, target: "BaseWorldTarget"):
         self.target = target
+        target.effects.append(self)
         self.run(target)
 
     def exit(self):
