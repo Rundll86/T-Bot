@@ -5,21 +5,22 @@ from rich.style import Style
 
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
+from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.world.target import BaseEntity, BulletGroup
 from t_bot.transform.vector import Vector2i
 from t_bot.transform.direction import direction_to_vector, input_to_direction
 
 if TYPE_CHECKING:
-    from t_bot.engine.world import GameWorld
+    pass
 
 
 class PlayerEntity(BaseEntity):
     def __init__(self) -> None:
+        GameController.player = self
         super().__init__("我", 100, "我")
         self.is_player = True
         self.style += Style(bold=True)
         self.sword = PlayerSword()
-        self.sword.position += Vector2i(1, 0)
         self.attack_counter = 0
         self.sword_group0 = BulletGroup([PlayerSword().set_position(Vector2i(0, 1))])
         self.sword_group1 = BulletGroup([PlayerSword().set_position(Vector2i(0, -1))])
@@ -40,10 +41,6 @@ class PlayerEntity(BaseEntity):
         )
 
     def register_events(self):
-        @self.subscribe(self.join_world)
-        def join_world(world: "GameWorld"):
-            world.add_target(self.sword)
-
         @self.subscribe(self.world.input)
         def input(char: str):
             if char in input_to_direction:
@@ -60,27 +57,30 @@ class PlayerEntity(BaseEntity):
                         match self.attack_counter % 5:
                             case 0:
                                 self.update_sword(self.sword_group1)
-                                self.world.add_target(
+                                self.world.add_bullet(
+                                    self,
                                     *self.attack1.fetch(
                                         self.direction,
                                         self.position,
-                                    )
+                                    ),
                                 )
                             case 1:
                                 self.update_sword(self.sword_group0)
-                                self.world.add_target(
+                                self.world.add_bullet(
+                                    self,
                                     *self.attack1.fetch(
                                         self.direction,
                                         self.position,
-                                    )
+                                    ),
                                 )
                             case 2:
                                 self.update_sword(self.sword_group2)
-                                self.world.add_target(
+                                self.world.add_bullet(
+                                    self,
                                     *self.attack2.fetch(
                                         self.direction,
                                         self.position,
-                                    )
+                                    ),
                                 )
                             case 3:
                                 self.update_sword(self.sword_group3)
@@ -91,4 +91,4 @@ class PlayerEntity(BaseEntity):
     def update_sword(self, group: BulletGroup):
         self.sword.public_die()
         self.sword = group.fetch(self.direction, self.position)[0]
-        self.world.add_target(self.sword)
+        self.world.add_bullet(self, self.sword)

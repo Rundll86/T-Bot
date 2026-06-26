@@ -7,7 +7,11 @@ class GameLogger:
 
     @classmethod
     def latest(cls) -> str:
-        if len(cls.logs) > 0:
+        if cls.have_log():
             return cls.logs[-1]
         else:
             return ""
+
+    @classmethod
+    def have_log(cls) -> bool:
+        return len(cls.logs) > 0

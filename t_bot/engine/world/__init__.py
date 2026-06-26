@@ -23,8 +23,8 @@ class GameWorld(EventBus):
 
     def add_target(self, *targets: BaseWorldTarget) -> tuple[BaseWorldTarget, ...]:
         for target in targets:
-            if isinstance(target, BaseBullet):
-                raise Exception("添加子弹目标时请使用add_bullet。")
+            if isinstance(target, BaseBullet) and target.launcher is None:
+                raise Exception("添加的子弹目标里没有launcher。")
             target.join_world.emit(self)
             self.targets.append(target)
         return targets

@@ -8,6 +8,8 @@ from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.event.logger import GameLogger
+from t_bot.engine.game_rule.damage import damage_float
+from t_bot.engine.renderer.components.progress_bar import ProgressBarRenderer
 from t_bot.engine.renderer.structs import BaseRenderable
 from t_bot.transform.direction import Direction
 from t_bot.transform.vector import Vector2i
@@ -65,23 +67,38 @@ class BaseEntity(BaseCollider):
         self.max_health = max_health
         self.current_health = self.max_health
         self.is_player = False
+        self.crit_rate = 0.05
+        self.health_bar = ProgressBarRenderer(20)
 
     def register_events(self):
         super().register_events()
 
         @self.subscribe(self.collided_with)
         def collided_with(collider: BaseCollider):
-            if not isinstance(collider, BaseBullet):
+            if not isinstance(collider, BaseBullet) or collider.launcher is None:
                 return
-            GameLogger.add_log("碰撞！")
+            if collider.launcher.is_player != self.is_player:
+                self.take_damage(collider.base_damage, False)
+
+    def take_damage(self, dmg: float, crit: bool) -> float:
+        total_dmg = damage_float(dmg)
+        self.current_health -= total_dmg
+        if not self.is_player:
+            GameLogger.add_log(f"造成了{dmg}点{'暴击' if crit else ''}伤害！")
+            GameController.focus_enemy = self
+        self.health_bar.max_value = self.max_health
+        self.health_bar.current_value = self.current_health
+        return total_dmg
 
 
 class BaseBullet(BaseCollider):
-    def __init__(self, penetrate_count: int, texture: str) -> None:
+    def __init__(self, texture: str) -> None:
         super().__init__(texture)
-        self.penetrate_count = penetrate_count
+        self.penetrate_count = 1
         self.lifetime: int = -1
         self.launcher: BaseEntity | None = None
+        self.base_damage = 10
+        self.crit_rate: float = 0
 
     def register_events(self):
         super().register_events()
@@ -91,6 +108,11 @@ class BaseBullet(BaseCollider):
             if self.lifetime > 0:
                 if timelifed >= self.lifetime:
                     self.public_die()
+
+    def get_total_crit_rate(self):
+        return (
+            self.launcher.crit_rate if self.launcher is not None else 0
+        ) + self.crit_rate
 
 
 class BulletGroup:

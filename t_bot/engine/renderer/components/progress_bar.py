@@ -1,6 +1,9 @@
 import math
 
+from rich.text import Text
+
 from t_bot.engine.renderer import BaseRenderer
+from t_bot.transform.vector import Vector2i
 
 
 class ProgressBarRenderer(BaseRenderer):
@@ -17,6 +20,12 @@ class ProgressBarRenderer(BaseRenderer):
         return math.ceil(self.length * self.get_progress())
 
     def render(self) -> None:
-        self.add_line(
-            f"[ {'#' * self.get_frontend()}{'·' * (self.length - self.get_frontend())} ]"
+        self.add_line("")
+        self.replace_at(
+            Vector2i(0, 0),
+            # f"\\[ [green]{'#' * self.get_frontend()}[/green][red]{'·' * (self.length - self.get_frontend())}[/red] ]",
+            Text("[ ")
+            + Text("#" * self.get_frontend(), style="green")
+            + Text("·" * (self.length - self.get_frontend()), style="red")
+            + Text(" ]"),
         )
