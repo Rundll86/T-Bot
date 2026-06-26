@@ -27,3 +27,4 @@ class BaseEffect(ABC, EventBus):
         if self.target is not None:
             while self in self.target.effects:
                 self.target.effects.remove(self)
+        self.unsubscribe_all()
