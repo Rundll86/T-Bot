@@ -118,16 +118,16 @@ class BaseCollider(BaseWorldTarget):
 class BaseEntity(BaseCollider):
     def __init__(self, display_name: str, max_health: float, texture: str) -> None:
         super().__init__(texture)
-        self.z_order = 2
-        self.obstructive = True
-        self.display_name = display_name
-        self.max_health = max_health
-        self.current_health = self.max_health
-        self.is_player = False
-        self.crit_rate = 0.05
-        self.crit_damage = 1
-        self.anti_crit = 0
-        self.health_bar = ProgressBarRenderer(20)
+        self.z_order: int = 2
+        self.obstructive: bool = True
+        self.display_name: str = display_name
+        self.max_health: float = max_health
+        self.current_health: float = self.max_health
+        self.is_player: bool = False
+        self.crit_rate: float = 0.05
+        self.crit_damage: float = 1
+        self.anti_crit: float = 0
+        self.health_bar: ProgressBarRenderer = ProgressBarRenderer(20)
 
     def register_events(self):
         super().register_events()

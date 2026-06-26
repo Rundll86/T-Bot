@@ -39,7 +39,15 @@ class PlayerUIRenderer(BaseRenderer):
             GameController.player.health_bar.redraw(),
         )
         self.auto_replace(
-            Vector2i(3, 5), f"攻击力 {GameController.player.attack_force}"
+            Vector2i(3, 5), f"攻击力 - {GameController.player.attack_force}"
+        )
+        self.auto_replace(
+            Vector2i(3, 6),
+            f"暴击[率/伤] - {GameController.player.crit_rate * 100:.1f}%/{GameController.player.crit_damage * 100:.1f}%",
+        )
+        self.auto_replace(
+            Vector2i(3, 7),
+            f"速度 - {GameController.player.speed:.2f}",
         )
         # 敌人状态
         if (
