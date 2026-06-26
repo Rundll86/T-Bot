@@ -64,7 +64,9 @@ class PlayerEntity(BaseEntity):
                                 self.world.add_bullet(
                                     self,
                                     *self.attack1.modify(
-                                        lambda b: b.set_base_damage(self.attack_force)
+                                        lambda b: b.set_base_damage(
+                                            self.attack_force * 1.1
+                                        )
                                     ).fetch(
                                         self.direction,
                                         self.position,
@@ -75,7 +77,9 @@ class PlayerEntity(BaseEntity):
                                 self.world.add_bullet(
                                     self,
                                     *self.attack1.modify(
-                                        lambda b: b.set_base_damage(self.attack_force)
+                                        lambda b: b.set_base_damage(
+                                            self.attack_force * 0.9
+                                        )
                                     ).fetch(
                                         self.direction,
                                         self.position,
@@ -86,7 +90,9 @@ class PlayerEntity(BaseEntity):
                                 self.world.add_bullet(
                                     self,
                                     *self.attack2.modify(
-                                        lambda b: b.set_base_damage(self.attack_force)
+                                        lambda b: b.set_base_damage(
+                                            self.attack_force * 1.5
+                                        )
                                     ).fetch(
                                         self.direction,
                                         self.position,
