@@ -1,5 +1,7 @@
 import math
 
+from rich.color import Color
+from rich.style import Style
 from rich.text import Text
 
 from t_bot.engine.renderer import BaseRenderer
@@ -24,8 +26,10 @@ class ProgressBarRenderer(BaseRenderer):
         self.replace_at(
             Vector2i(0, 0),
             # f"\\[ [green]{'#' * self.get_frontend()}[/green][red]{'·' * (self.length - self.get_frontend())}[/red] ]",
-            Text("[ ")
-            + Text("#" * self.get_frontend(), style="green")
+            Text("\\[ ")
+            + Text(
+                "#" * self.get_frontend(), style=Style(color=Color.from_rgb(0, 255, 0))
+            )
             + Text("·" * (self.length - self.get_frontend()), style="red")
             + Text(" ]"),
         )
