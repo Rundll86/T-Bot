@@ -20,6 +20,7 @@ class GameWorld(EventBus):
         self.input = EventSubscriber()
         self.target_died = EventSubscriber()
         self.targets: list[BaseWorldTarget] = []
+        self.size: Vector2i = Vector2i(20, 20)
         super().__init__()
 
     def add_target(self, *targets: BaseWorldTarget) -> tuple[BaseWorldTarget, ...]:
@@ -68,8 +69,8 @@ class GameWorld(EventBus):
 class WorldRenderer(BaseRenderer):
     def __init__(self, world: GameWorld) -> None:
         super().__init__()
-        self.size: Vector2i = Vector2i.one() * 20
         self.world = world
+        self.size: Vector2i = self.world.size
 
     def render(self) -> None:
         self.add_line(f"*{'**' * self.size.x}*")

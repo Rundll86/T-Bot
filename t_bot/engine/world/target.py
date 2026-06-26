@@ -51,6 +51,14 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def public_die(self):
         self.world.target_died.emit(self)
 
+    def move(self, delta: Vector2i):
+        self.position = Vector2i(self.position + delta).clamp(
+            0,
+            self.world.size.x - 1,
+            0,
+            self.world.size.y - 1,
+        )
+
     @property
     def world(self):
         return GameController.world
