@@ -70,7 +70,7 @@ class BaseEntity(BaseCollider):
         self.max_health = max_health
         self.current_health = self.max_health
         self.is_player = False
-        self.crit_rate = 0.9
+        self.crit_rate = 0.05
         self.crit_damage = 1
         self.anti_crit = 0
         self.health_bar = ProgressBarRenderer(20)
