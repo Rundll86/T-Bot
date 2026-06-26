@@ -28,7 +28,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def render(self) -> Text:
         return Text(
             self.texture,
-            style=Style(color=self.foreground, bgcolor=self.background),
+            style=Style(color=self.foreground, bgcolor=self.background) + self.style,
         )
 
     def set_position(self, newpos: Vector2i):

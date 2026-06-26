@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from rich.style import Style
+
 
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
@@ -14,6 +16,7 @@ if TYPE_CHECKING:
 class PlayerEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("我", 100, "我")
+        self.style += Style(bold=True)
         self.sword = PlayerSword()
         self.sword.position += Vector2i(1, 0)
         self.attack_counter = 0
