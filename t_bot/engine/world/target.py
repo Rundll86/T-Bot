@@ -174,7 +174,7 @@ class BaseEntity(BaseCollider):
         return total_dmg
 
     def public_die(self):
-        GameLogger.add_log(f"{self.display_name}已被打败！")
+        GameLogger.add_log(Text(f"{self.display_name}已被打败！", style="#00ff00"))
         return super().public_die()
 
     def follow_player(self, speed: int = 1):
