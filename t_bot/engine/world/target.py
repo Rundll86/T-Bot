@@ -25,7 +25,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
-        self.style = Style()
+        self.blends: list[Style] = []
         self.background: Color = Color.from_rgb(0, 0, 0)
         self.foreground: Color = Color.from_rgb(255, 255, 255)
         self.direction: Direction = Direction.UP
@@ -37,7 +37,8 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def render(self) -> Text:
         return Text(
             self.texture,
-            style=Style(color=self.foreground, bgcolor=self.background) + self.style,
+            style=Style(color=self.foreground, bgcolor=self.background)
+            + self.blend_output,
         )
 
     def set_position(self, newpos: Vector2i):
@@ -73,6 +74,13 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     @property
     def world(self):
         return GameController.world
+
+    @property
+    def blend_output(self) -> Style:
+        base = Style()
+        for blend in self.blends:
+            base += blend
+        return base
 
 
 class BaseCollider(BaseWorldTarget):

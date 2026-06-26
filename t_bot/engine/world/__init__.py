@@ -1,6 +1,5 @@
 import sys
 
-from rich.color import Color
 from rich.style import Style
 from rich.text import Text
 
@@ -9,6 +8,7 @@ from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
+from t_bot.engine.util.color import blend_colors
 from t_bot.engine.world.target import (
     BaseBullet,
     BaseCollider,
@@ -16,21 +16,6 @@ from t_bot.engine.world.target import (
     BaseWorldTarget,
 )
 from t_bot.transform.vector import Vector2i
-
-
-def blend_colors(*colors: Color) -> Color:
-    """将多个 Color 按 RGB 通道取算术平均，产生混合色。
-
-    单色直接返回；空序列返回黑色。
-    """
-    if not colors:
-        return Color.from_rgb(0, 0, 0)
-    if len(colors) == 1:
-        return colors[0]
-    r = sum(c.triplet.red for c in colors) // len(colors)
-    g = sum(c.triplet.green for c in colors) // len(colors)
-    b = sum(c.triplet.blue for c in colors) // len(colors)
-    return Color.from_rgb(int(r), int(g), int(b))
 
 
 class GameWorld(EventBus):
@@ -107,7 +92,7 @@ class WorldRenderer(BaseRenderer):
                         Text(
                             top.texture,
                             style=Style(color=top.foreground, bgcolor=blended_bg)
-                            + top.style,
+                            + top.blend_output,
                         )
                     )
                 else:
