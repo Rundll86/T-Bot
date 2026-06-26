@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from rich.style import Style
 
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
@@ -17,13 +16,22 @@ class PlayerEntity(BaseEntity):
         super().__init__("我", 100, "我")
         self.sword = PlayerSword()
         self.sword.position += Vector2i(1, 0)
-        self.style = self.style + Style()
         self.attack_counter = 0
+        self.sword_group0 = BulletGroup([PlayerSword().set_position(Vector2i(0, 1))])
+        self.sword_group1 = BulletGroup([PlayerSword().set_position(Vector2i(0, -1))])
+        self.sword_group2 = BulletGroup([PlayerSword().set_position(Vector2i(3, 0))])
+        self.sword_group3 = BulletGroup([PlayerSword().set_position(Vector2i(1, 0))])
         self.attack1 = BulletGroup(
             [
                 PlayerSwordLight().set_position(Vector2i(1, 1)),
                 PlayerSwordLight().set_position(Vector2i(1, 0)),
                 PlayerSwordLight().set_position(Vector2i(1, -1)),
+            ]
+        )
+        self.attack2 = BulletGroup(
+            [
+                PlayerSwordLight().set_position(Vector2i(1, 0)),
+                PlayerSwordLight().set_position(Vector2i(2, 0)),
             ]
         )
 
@@ -39,19 +47,44 @@ class PlayerEntity(BaseEntity):
                 delta = direction_to_vector[direction]
                 self.position += delta
                 self.direction = direction
-                self.sword.position = self.position + delta.rotated_left()
+                self.update_sword(self.sword_group0)
+                self.attack_counter = 0
             else:
                 match char:
                     case "j":
-                        delta: Vector2i = self.sword.position - self.position
-                        match self.attack_counter % 3:
+                        delta = Vector2i.from_tuple(self.sword.position - self.position)
+                        match self.attack_counter % 5:
                             case 0:
-                                self.sword.position = self.position + delta.symmetry(
-                                    direction_to_vector[self.direction]
-                                )
+                                self.update_sword(self.sword_group1)
                                 self.world.add_target(
                                     *self.attack1.fetch(
                                         self.direction,
                                         self.position,
                                     )
                                 )
+                            case 1:
+                                self.update_sword(self.sword_group0)
+                                self.world.add_target(
+                                    *self.attack1.fetch(
+                                        self.direction,
+                                        self.position,
+                                    )
+                                )
+                            case 2:
+                                self.update_sword(self.sword_group2)
+                                self.world.add_target(
+                                    *self.attack2.fetch(
+                                        self.direction,
+                                        self.position,
+                                    )
+                                )
+                            case 3:
+                                self.update_sword(self.sword_group3)
+                            case 4:
+                                self.update_sword(self.sword_group0)
+                        self.attack_counter += 1
+
+    def update_sword(self, group: BulletGroup):
+        self.sword.public_die()
+        self.sword = group.fetch(self.direction, self.position)[0]
+        self.world.add_target(self.sword)

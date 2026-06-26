@@ -11,5 +11,5 @@ class GameController(EventBus):
     world: "GameWorld"
 
     def wait_input(self) -> str:
-        char = msvcrt.getch().decode("ascii")
+        char = msvcrt.getch().decode("utf8")
         return char

@@ -1,5 +1,6 @@
 import copy
 
+from rich.color import Color
 from rich.style import Style
 from rich.text import Text
 
@@ -19,15 +20,15 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
         self.style = Style()
-        self.background: str = "black"
-        self.foreground: str = "white"
+        self.background: Color = Color.from_rgb(0, 0, 0)
+        self.foreground: Color = Color.from_rgb(255, 255, 255)
         self.direction: Direction = Direction.UP
         self.timelifed: int = 0
 
     def render(self) -> Text:
         return Text(
             self.texture,
-            style=Style(color=self.foreground, bgcolor=self.background) + self.style,
+            style=Style(color=self.foreground, bgcolor=self.background),
         )
 
     def set_position(self, newpos: Vector2i):
@@ -41,6 +42,9 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         def input(char: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
+
+    def public_die(self):
+        self.world.target_died.emit(self)
 
     @property
     def world(self):
@@ -78,7 +82,7 @@ class BaseBullet(BaseCollider):
         def aged(timelifed: int):
             if self.lifetime > 0:
                 if timelifed >= self.lifetime:
-                    self.world.target_died.emit(self)
+                    self.public_die()
 
 
 class BulletGroup:
