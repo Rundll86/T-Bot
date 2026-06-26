@@ -63,6 +63,14 @@ class BaseEntity(BaseCollider):
         self.display_name = display_name
         self.max_health = max_health
         self.current_health = self.max_health
+        self.is_player = False
+
+    def register_events(self):
+        super().register_events()
+
+        @self.subscribe(self.collided_with)
+        def collided_with(collider: BaseCollider):
+            pass
 
 
 class BaseBullet(BaseCollider):
@@ -73,10 +81,6 @@ class BaseBullet(BaseCollider):
 
     def register_events(self):
         super().register_events()
-
-        @self.subscribe(self.collided_with)
-        def collided_with(other: BaseCollider):
-            pass
 
         @self.subscribe(self.aged)
         def aged(timelifed: int):

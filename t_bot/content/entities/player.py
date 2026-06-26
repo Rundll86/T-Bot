@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 class PlayerEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("我", 100, "我")
+        self.is_player = True
         self.style += Style(bold=True)
         self.sword = PlayerSword()
         self.sword.position += Vector2i(1, 0)
