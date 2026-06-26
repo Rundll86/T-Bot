@@ -51,10 +51,6 @@ class GameWorld(EventBus):
             if char == "e":
                 sys.exit(0)
 
-        @self.subscribe(RoundController.time_went)
-        def next_round(input: str):
-            self.detect_collision()
-
         @self.subscribe(self.target_died)
         def target_died(target: BaseWorldTarget):
             while target in self.targets:

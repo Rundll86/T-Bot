@@ -37,4 +37,5 @@ class TBot(EventBus):
             RoundController.last_input = input_char
             self.world.input.emit(input_char)
             RoundController.time_went.emit(input_char)
+            self.world.detect_collision()
             self.redraw()
