@@ -1,5 +1,9 @@
 import sys
 
+from rich.color import Color
+from rich.style import Style
+from rich.text import Text
+
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
@@ -12,6 +16,21 @@ from t_bot.engine.world.target import (
     BaseWorldTarget,
 )
 from t_bot.transform.vector import Vector2i
+
+
+def blend_colors(*colors: Color) -> Color:
+    """将多个 Color 按 RGB 通道取算术平均，产生混合色。
+
+    单色直接返回；空序列返回黑色。
+    """
+    if not colors:
+        return Color.from_rgb(0, 0, 0)
+    if len(colors) == 1:
+        return colors[0]
+    r = sum(c.triplet.red for c in colors) // len(colors)
+    g = sum(c.triplet.green for c in colors) // len(colors)
+    b = sum(c.triplet.blue for c in colors) // len(colors)
+    return Color.from_rgb(int(r), int(g), int(b))
 
 
 class GameWorld(EventBus):
@@ -77,12 +96,20 @@ class WorldRenderer(BaseRenderer):
         for y in range(self.size.y):
             self.add_line("*")
             for x in range(self.size.y):
-                target: BaseWorldTarget | None = None
-                for t in reversed(self.world.targets):
-                    if t.position == Vector2i(x, y):
-                        target = t
-                if target is not None:
-                    self.append_current(target.render())
+                targets_at_pos = [
+                    t for t in self.world.targets if t.position == Vector2i(x, y)
+                ]
+                if targets_at_pos:
+                    targets_at_pos.sort(key=lambda t: t.z_order, reverse=True)
+                    top = targets_at_pos[0]
+                    blended_bg = blend_colors(*(t.background for t in targets_at_pos))
+                    self.append_current(
+                        Text(
+                            top.texture,
+                            style=Style(color=top.foreground, bgcolor=blended_bg)
+                            + top.style,
+                        )
+                    )
                 else:
                     self.append_current("  ")
             self.append_current("*")

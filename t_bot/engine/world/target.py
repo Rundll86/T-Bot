@@ -29,6 +29,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.background: Color = Color.from_rgb(0, 0, 0)
         self.foreground: Color = Color.from_rgb(255, 255, 255)
         self.direction: Direction = Direction.UP
+        self.z_order: int = 0
         self.timelifed: int = 0
         self.speed: float = 1
         self.action_progress: float = 0
@@ -102,6 +103,7 @@ class BaseCollider(BaseWorldTarget):
 class BaseEntity(BaseCollider):
     def __init__(self, display_name: str, max_health: float, texture: str) -> None:
         super().__init__(texture)
+        self.z_order = 2
         self.obstructive = True
         self.display_name = display_name
         self.max_health = max_health
@@ -159,6 +161,7 @@ class BaseEntity(BaseCollider):
 class BaseBullet(BaseCollider):
     def __init__(self, texture: str) -> None:
         super().__init__(texture)
+        self.z_order = 1
         self.penetrate_count = 1
         self.lifetime: int = -1
         self.launcher: BaseEntity | None = None

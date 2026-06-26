@@ -16,6 +16,7 @@ class PlayerEntity(BaseEntity):
     def __init__(self) -> None:
         GameController.player = self
         super().__init__("我", 100, "我")
+        self.z_order = 3
         self.is_player = True
         self.style += Style(bold=True)
         self.sword = PlayerSword()
