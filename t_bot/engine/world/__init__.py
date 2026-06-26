@@ -58,9 +58,9 @@ class GameWorld(EventBus):
 
     def detect_collision(self):
         for target in self.targets:
-            if isinstance(target, BaseCollider):
+            if isinstance(target, BaseCollider) and target.hitbox:
                 for next_target in self.targets:
-                    if isinstance(next_target, BaseCollider):
+                    if isinstance(next_target, BaseCollider) and target.hitbox:
                         if target.position == next_target.position:
                             target.collided_with.emit(next_target)
 

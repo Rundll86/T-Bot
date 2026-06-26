@@ -59,6 +59,7 @@ class BaseCollider(BaseWorldTarget):
     def __init__(self, texture: str) -> None:
         self.collided_with = EventSubscriber()
         super().__init__(texture)
+        self.hitbox = True
 
 
 class BaseEntity(BaseCollider):
