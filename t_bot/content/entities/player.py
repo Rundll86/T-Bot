@@ -87,8 +87,10 @@ class PlayerEntity(BaseEntity):
                             case 4:
                                 self.update_sword(self.sword_group0)
                         self.attack_counter += 1
+                        self.sword.hitbox = True
 
     def update_sword(self, group: BulletGroup):
         self.sword.public_die()
         self.sword = group.fetch(self.direction, self.position)[0]
+        self.sword.hitbox = False
         self.world.add_bullet(self, self.sword)
