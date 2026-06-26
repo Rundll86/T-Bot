@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import copy
 from typing import Literal
 
@@ -216,6 +217,10 @@ class BaseBullet(BaseCollider):
                 if timelifed > self.lifetime:
                     self.public_die()
 
+    def set_base_damage(self, value: float):
+        self.base_damage = value
+        return self
+
 
 class BulletGroup:
     def __init__(self, base_space: list[BaseBullet]) -> None:
@@ -250,3 +255,13 @@ class BulletGroup:
             bullet_cloned.set_position(rotate(bullet.position) + base_position)
             new_space.append(bullet_cloned)
         return new_space
+
+    def modify(
+        self, executor: Callable[[BaseBullet], BaseBullet | None]
+    ) -> "BulletGroup":
+        for i in range(len(self.base_space)):
+            bullet = self.base_space[i]
+            result = executor(bullet)
+            if isinstance(result, BaseBullet):
+                self.base_space[i] = result
+        return self

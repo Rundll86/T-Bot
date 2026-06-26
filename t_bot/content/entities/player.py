@@ -63,7 +63,9 @@ class PlayerEntity(BaseEntity):
                                 self.update_sword(self.sword_group1)
                                 self.world.add_bullet(
                                     self,
-                                    *self.attack1.fetch(
+                                    *self.attack1.modify(
+                                        lambda b: b.set_base_damage(self.attack_force)
+                                    ).fetch(
                                         self.direction,
                                         self.position,
                                     ),
@@ -72,7 +74,9 @@ class PlayerEntity(BaseEntity):
                                 self.update_sword(self.sword_group0)
                                 self.world.add_bullet(
                                     self,
-                                    *self.attack1.fetch(
+                                    *self.attack1.modify(
+                                        lambda b: b.set_base_damage(self.attack_force)
+                                    ).fetch(
                                         self.direction,
                                         self.position,
                                     ),
@@ -81,7 +85,9 @@ class PlayerEntity(BaseEntity):
                                 self.update_sword(self.sword_group2)
                                 self.world.add_bullet(
                                     self,
-                                    *self.attack2.fetch(
+                                    *self.attack2.modify(
+                                        lambda b: b.set_base_damage(self.attack_force)
+                                    ).fetch(
                                         self.direction,
                                         self.position,
                                     ),
