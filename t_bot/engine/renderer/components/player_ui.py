@@ -37,15 +37,17 @@ class PlayerUIRenderer(BaseRenderer):
             else Text("行动日志...", style=Style(color=Color.from_rgb(100, 100, 100))),
         )
         # 敌人状态
-        self.replace_at(Vector2i(3, 7), "敌人状态", 8)
         if GameController.focus_enemy is not None:
+            self.replace_at(Vector2i(3, 7), GameController.focus_enemy.display_name)
             self.replace_at(
-                Vector2i(3, 8),
-                " - " + GameController.focus_enemy.health_bar.redraw(),
+                Vector2i(5, 8),
+                GameController.focus_enemy.health_bar.redraw()
+                + f" {GameController.focus_enemy.current_health}/{GameController.focus_enemy.max_health}",
             )
         else:
+            self.replace_at(Vector2i(3, 7), "敌人状态", 8)
             self.replace_at(
-                Vector2i(3, 8),
+                Vector2i(5, 8),
                 Text("未进入战斗", style=Style(color=Color.from_rgb(100, 100, 100))),
                 10,
             )

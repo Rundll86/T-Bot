@@ -19,17 +19,16 @@ class ProgressBarRenderer(BaseRenderer):
         return self.current_value / self.max_value
 
     def get_frontend(self) -> int:
-        return math.ceil(self.length * self.get_progress())
+        return max(math.ceil(self.length * self.get_progress()), 0)
 
     def render(self) -> None:
         self.add_line("")
         self.replace_at(
             Vector2i(0, 0),
-            # f"\\[ [green]{'#' * self.get_frontend()}[/green][red]{'·' * (self.length - self.get_frontend())}[/red] ]",
             Text("\\[ ")
             + Text(
                 "#" * self.get_frontend(), style=Style(color=Color.from_rgb(0, 255, 0))
             )
-            + Text("·" * (self.length - self.get_frontend()), style="red")
+            + Text("-" * (self.length - self.get_frontend()), style="red")
             + Text(" ]"),
         )

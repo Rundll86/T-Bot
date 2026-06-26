@@ -84,8 +84,8 @@ class BaseEntity(BaseCollider):
         total_dmg = damage_float(dmg)
         self.current_health -= total_dmg
         if not self.is_player:
-            GameLogger.add_log(f"造成了{dmg}点{'暴击' if crit else ''}伤害！")
             GameController.focus_enemy = self
+            GameLogger.add_log(f"造成了{dmg}点{'暴击' if crit else ''}伤害！")
         self.health_bar.max_value = self.max_health
         self.health_bar.current_value = self.current_health
         return total_dmg

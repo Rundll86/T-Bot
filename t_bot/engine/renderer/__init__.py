@@ -31,7 +31,7 @@ class BaseRenderer(ABC):
             line: 纯文本字符串或带样式的 ``Text`` 对象。
         """
         if isinstance(line, str):
-            line = Text(line)
+            line = Text.from_markup(line)
         self.buffer.append(line)
 
     def append_current(self, data: str | Text) -> None:
@@ -41,7 +41,7 @@ class BaseRenderer(ABC):
             data: 纯文本字符串或带样式的 ``Text`` 对象。
         """
         if isinstance(data, str):
-            data = Text(data)
+            data = Text.from_markup(data)
         self.buffer[-1] = self.buffer[-1] + data
 
     # ------------------------------------------------------------------
@@ -66,7 +66,7 @@ class BaseRenderer(ABC):
         """
         # ---- 统一为 Text ----
         if isinstance(new_str, str):
-            new_str = Text(new_str)
+            new_str = Text.from_markup(new_str)
 
         n = length_override if length_override >= 0 else len(new_str.plain)
         row = position.y
