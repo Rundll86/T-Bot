@@ -46,7 +46,7 @@ class PlayerEntity(BaseEntity):
             if char in input_to_direction:
                 direction = input_to_direction[char]
                 delta = direction_to_vector[direction]
-                self.position += delta
+                self.move(delta)
                 self.direction = direction
                 self.update_sword(self.sword_group0)
                 self.attack_counter = 0

@@ -172,6 +172,6 @@ class BulletGroup:
             bullet_cloned.collided_with = EventSubscriber()
             bullet_cloned.register_events()
             bullet_cloned.timelifed = 0
-            bullet_cloned.position = rotate(bullet.position) + base_position
+            bullet_cloned.set_position(rotate(bullet.position) + base_position)
             new_space.append(bullet_cloned)
         return new_space
