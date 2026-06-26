@@ -7,6 +7,7 @@ from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
+from t_bot.engine.controller.wave_controller import WaveController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.event.logger import GameLogger
@@ -142,6 +143,10 @@ class BaseEntity(BaseCollider):
                     collider.penetrate_count -= 1
                 if collider.penetrate_count == 0:
                     collider.public_die()
+
+        @self.subscribe(self.die)
+        def die():
+            WaveController.judge_next()
 
     def take_damage(self, dmg: float, crit: bool) -> float:
         total_dmg = damage_float(dmg)

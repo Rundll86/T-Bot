@@ -17,7 +17,7 @@ class SlimeEntity(BaseEntity):
         @self.subscribe(self.my_turn)
         def my_turn():
             self.follow_player()
-            if self.timelifed % 2 == 0:
+            if self.timelifed % 3 == 0:
                 match self.is_player_crossed():
                     case True, direction:
                         self.direction = direction

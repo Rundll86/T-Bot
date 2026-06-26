@@ -66,6 +66,15 @@ class GameWorld(EventBus):
                         if target.position == next_target.position:
                             target.collided_with.emit(next_target)
 
+    @property
+    def enemy_count(self) -> int:
+        result = 0
+        for target in self.targets:
+            if isinstance(target, BaseEntity):
+                if not target.is_player:
+                    result += 1
+        return result
+
 
 class WorldRenderer(BaseRenderer):
     def __init__(self, world: GameWorld) -> None:

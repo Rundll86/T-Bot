@@ -1,10 +1,8 @@
-from random import randint
-
 from t_bot.content.entities.player import PlayerEntity
-from t_bot.content.entities.slime import SlimeEntity
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.controller.screen_controller import ScreenController
+from t_bot.engine.controller.wave_controller import WaveController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.renderer.components.game import GameRenderer
 from t_bot.engine.world import GameWorld
@@ -21,10 +19,7 @@ class TBot(EventBus):
 
     def start(self):
         self.world.add_target(PlayerEntity().set_position(Vector2i(5, 5)))
-        for _ in range(1):
-            self.world.add_target(
-                SlimeEntity().set_position(Vector2i(randint(1, 8), randint(1, 8)))
-            )
+        WaveController.judge_next()
 
     def redraw(self):
         self.screen_controller.clear()
