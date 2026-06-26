@@ -4,6 +4,7 @@ from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
+from t_bot.engine.renderer.effects.style_blend import StyleBlendEffect
 from t_bot.engine.world.target import BaseEntity, BulletGroup
 from t_bot.transform.vector import Vector2i
 from t_bot.transform.direction import direction_to_vector, input_to_direction
@@ -18,7 +19,7 @@ class PlayerEntity(BaseEntity):
         super().__init__("我", 100, "我")
         self.z_order = 3
         self.is_player = True
-        self.blends.append(Style(bold=True))
+        self.effects.append(StyleBlendEffect(Style(bold=True)))
         self.sword = PlayerSword()
         self.attack_counter = 0
         self.sword_group0 = BulletGroup([PlayerSword().set_position(Vector2i(0, 1))])

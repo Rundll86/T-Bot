@@ -12,6 +12,7 @@ from t_bot.engine.event.logger import GameLogger
 from t_bot.engine.game_rule.crit import judge_crit
 from t_bot.engine.game_rule.damage import damage_float
 from t_bot.engine.renderer.components.progress_bar import ProgressBarRenderer
+from t_bot.engine.renderer.effect import BaseEffect
 from t_bot.engine.renderer.effects.hurt import HurtEffect
 from t_bot.engine.renderer.structs import BaseRenderable
 from t_bot.transform.direction import Direction
@@ -26,7 +27,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         super().__init__(2)
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
-        self.blends: list[Style] = []
+        self.effects: list["BaseEffect"] = []
         self.background: Color = Color.from_rgb(0, 0, 0)
         self.foreground: Color = Color.from_rgb(255, 255, 255)
         self.direction: Direction = Direction.UP
@@ -79,8 +80,8 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     @property
     def blend_output(self) -> Style:
         base = Style()
-        for blend in self.blends:
-            base += blend
+        for effect in self.effects:
+            base += effect.style
         return base
 
 
