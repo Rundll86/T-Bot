@@ -18,7 +18,7 @@ class PlayerEntity(BaseEntity):
         super().__init__("我", 100, "我")
         self.z_order = 3
         self.is_player = True
-        self.style += Style(bold=True)
+        self.blends.append(Style(bold=True))
         self.sword = PlayerSword()
         self.attack_counter = 0
         self.sword_group0 = BulletGroup([PlayerSword().set_position(Vector2i(0, 1))])

@@ -12,6 +12,7 @@ from t_bot.engine.event.logger import GameLogger
 from t_bot.engine.game_rule.crit import judge_crit
 from t_bot.engine.game_rule.damage import damage_float
 from t_bot.engine.renderer.components.progress_bar import ProgressBarRenderer
+from t_bot.engine.renderer.effects.hurt import HurtEffect
 from t_bot.engine.renderer.structs import BaseRenderable
 from t_bot.transform.direction import Direction
 from t_bot.transform.vector import Vector2i
@@ -48,7 +49,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def register_events(self):
         super().register_events()
 
-        @self.subscribe(RoundController.next_round)
+        @self.subscribe(RoundController.time_went)
         def next_round(input: str):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
@@ -153,6 +154,7 @@ class BaseEntity(BaseCollider):
                 GameLogger.add_log(f"造成了{total_dmg}点伤害！")
         self.health_bar.max_value = self.max_health
         self.health_bar.current_value = self.current_health
+        HurtEffect().apply(self)
         if self.current_health <= 0:
             self.public_die()
         return total_dmg

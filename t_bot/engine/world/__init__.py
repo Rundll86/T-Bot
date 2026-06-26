@@ -51,7 +51,7 @@ class GameWorld(EventBus):
             if char == "e":
                 sys.exit(0)
 
-        @self.subscribe(RoundController.next_round)
+        @self.subscribe(RoundController.time_went)
         def next_round(input: str):
             self.detect_collision()
 

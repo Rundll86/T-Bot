@@ -2,5 +2,5 @@ from t_bot.engine.event.event_subscriber import EventSubscriber
 
 
 class RoundController:
-    next_round: EventSubscriber = EventSubscriber()
+    time_went: EventSubscriber = EventSubscriber()
     last_input: str = ""
