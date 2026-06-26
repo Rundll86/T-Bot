@@ -51,7 +51,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
             self.timelifed += 1
             self.aged.emit(self.timelifed)
             self.action_progress += self.speed
-            if self.action_progress >= 1:
+            while self.action_progress >= 1:
                 self.action_progress -= 1
                 self.my_turn.emit()
 
