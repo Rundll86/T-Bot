@@ -65,7 +65,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
     def public_die(self):
         self.world.target_died.emit(self)
         self.die.emit()
-        # self.unsubscribe_all()
+        self.unsubscribe_all()
 
     def move(self, delta: Vector2i):
         old_pos = self.position
@@ -247,6 +247,7 @@ class BulletGroup:
         new_space: list[BaseBullet] = []
         for bullet in self.base_space:
             bullet_cloned = copy.copy(bullet)
+            bullet_cloned.subscriptions = []
             bullet_cloned.join_world = EventSubscriber()
             bullet_cloned.aged = EventSubscriber()
             bullet_cloned.collided_with = EventSubscriber()
