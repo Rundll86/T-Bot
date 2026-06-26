@@ -11,7 +11,6 @@ from t_bot.transform.vector import Vector2i
 
 class EntityPair(BaseModel):
     model_config = {"arbitrary_types_allowed": True}
-
     entity: Callable[[], BaseEntity]
     from_wave: int
     to_wave: int
