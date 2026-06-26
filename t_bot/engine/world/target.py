@@ -52,7 +52,7 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.world.target_died.emit(self)
 
     def move(self, delta: Vector2i):
-        self.position = Vector2i(self.position + delta).clamp(
+        self.position = Vector2i.from_tuple(self.position + delta).clamp(
             0,
             self.world.size.x - 1,
             0,
