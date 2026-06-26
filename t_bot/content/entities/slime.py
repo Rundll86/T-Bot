@@ -9,7 +9,7 @@ from t_bot.engine.world.target import BaseEntity
 class SlimeEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("史莱姆", 100, "史")
-        self.speed = random.uniform(0.1, 0.6)
+        self.speed = random.uniform(0.1, 0.4)
 
     def register_events(self):
         super().register_events()
@@ -17,7 +17,7 @@ class SlimeEntity(BaseEntity):
         @self.subscribe(self.my_turn)
         def my_turn():
             self.follow_player()
-            if self.timelifed % 3 == 0:
+            if self.timelifed % 5 == 0:
                 match self.is_player_crossed():
                     case True, direction:
                         self.direction = direction
@@ -31,4 +31,4 @@ class SlimeEntity(BaseEntity):
 
         @self.subscribe(self.die)
         def die():
-            self.world.add_target(FlowerEntity())
+            self.world.add_target(FlowerEntity().set_position(self.position))

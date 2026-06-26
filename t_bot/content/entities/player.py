@@ -39,6 +39,7 @@ class PlayerEntity(BaseEntity):
                 PlayerSwordLight().set_position(Vector2i(2, 0)),
             ]
         )
+        self.attack_force = 10
 
     def register_events(self):
         super().register_events()

@@ -27,7 +27,10 @@ class PlayerUIRenderer(BaseRenderer):
             self.add_line("|")
         self.add_line("-" * (self.size + 2))
         # 玩家状态
-        self.replace_at(Vector2i(3, 2), "生命值", 6)
+        self.auto_replace(
+            Vector2i(3, 2),
+            f"生命值 [{GameController.player.current_health}/{GameController.player.max_health}]",
+        )
         self.replace_at(
             Vector2i(3, 3),
             " - " + GameController.player.health_bar.redraw(),
