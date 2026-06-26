@@ -117,16 +117,20 @@ class BaseCollider(BaseWorldTarget):
 
 class BaseEntity(BaseCollider):
     def __init__(self, display_name: str, max_health: float, texture: str) -> None:
+        from t_bot.engine.controller.wave_controller import WaveController
+
         super().__init__(texture)
         self.z_order: int = 2
         self.obstructive: bool = True
         self.display_name: str = display_name
-        self.max_health: float = max_health
-        self.current_health: float = self.max_health
         self.is_player: bool = False
         self.crit_rate: float = 0.05
         self.crit_damage: float = 1
         self.anti_crit: float = 0
+        self.max_health: float = max_health
+        if not self.is_player:
+            self.max_health += WaveController.current_wave * 5
+        self.current_health: float = self.max_health
         self.health_bar: ProgressBarRenderer = ProgressBarRenderer(20)
 
     def register_events(self):
