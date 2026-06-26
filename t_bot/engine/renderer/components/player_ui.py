@@ -33,7 +33,10 @@ class PlayerUIRenderer(BaseRenderer):
             " - " + GameController.player.health_bar.redraw(),
         )
         # 敌人状态
-        if GameController.focus_enemy is not None:
+        if (
+            GameController.focus_enemy is not None
+            and GameController.focus_enemy in GameController.world.targets
+        ):
             self.replace_at(
                 Vector2i(3, 7),
                 GameController.focus_enemy.display_name,
