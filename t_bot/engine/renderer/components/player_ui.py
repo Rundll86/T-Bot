@@ -54,7 +54,7 @@ class PlayerUIRenderer(BaseRenderer):
             self.replace_at(
                 Vector2i(5, 12),
                 GameController.focus_enemy.health_bar.redraw()
-                + f" {GameController.focus_enemy.current_health}/{GameController.focus_enemy.max_health}",
+                + f" {GameController.focus_enemy.current_health:.0f}/{GameController.focus_enemy.max_health:.0f}",
             )
         else:
             self.replace_at(Vector2i(3, 11), "敌人状态", 8)
