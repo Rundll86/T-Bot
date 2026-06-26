@@ -5,6 +5,7 @@ from rich.text import Text
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.logger import GameLogger
 from t_bot.engine.renderer import BaseRenderer
+from t_bot.engine.util.character import get_space_count
 from t_bot.transform.vector import Vector2i
 
 
@@ -38,7 +39,11 @@ class PlayerUIRenderer(BaseRenderer):
         )
         # 敌人状态
         if GameController.focus_enemy is not None:
-            self.replace_at(Vector2i(3, 7), GameController.focus_enemy.display_name)
+            self.replace_at(
+                Vector2i(3, 7),
+                GameController.focus_enemy.display_name,
+                get_space_count(GameController.focus_enemy.display_name),
+            )
             self.replace_at(
                 Vector2i(5, 8),
                 GameController.focus_enemy.health_bar.redraw()
