@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from t_bot.content.entities.slime import SlimeEntity
 from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.util.math import sample_in_rect
 from t_bot.engine.world.target import BaseEntity
 from t_bot.transform.vector import Vector2i
 
@@ -42,7 +43,11 @@ class WaveController:
                 continue
             spawn_count = randint(pair.count.x, pair.count.y)
             for _ in range(spawn_count):
-                result.append(pair.entity())
+                result.append(
+                    pair.entity().set_position(
+                        sample_in_rect(GameController.world.size)
+                    )
+                )
         return result
 
     @classmethod
