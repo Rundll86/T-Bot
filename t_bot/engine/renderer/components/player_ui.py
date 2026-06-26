@@ -47,7 +47,7 @@ class PlayerUIRenderer(BaseRenderer):
         )
         self.auto_replace(
             Vector2i(3, 7),
-            f"速度 - {GameController.player.speed:.2f}",
+            f"行动速度 - {GameController.player.speed:.2f}",
         )
         # 敌人状态
         if (
