@@ -107,7 +107,7 @@ class BaseBullet(BaseCollider):
         @self.subscribe(self.aged)
         def aged(timelifed: int):
             if self.lifetime > 0:
-                if timelifed >= self.lifetime:
+                if timelifed > self.lifetime:
                     self.public_die()
 
     def get_total_crit_rate(self):
