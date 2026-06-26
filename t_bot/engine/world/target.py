@@ -79,15 +79,20 @@ class BaseCollider(BaseWorldTarget):
         self.collided_with = EventSubscriber()
         super().__init__(texture)
         self.hitbox = True
+        self.obstructive = False
 
     def move(self, delta: Vector2i):
         old_pos, new_pos = super().move(delta)
-        if new_pos == old_pos:
+        if new_pos == old_pos or not self.obstructive:
             return old_pos, new_pos
         for target in self.world.targets:
             if target is self:
                 continue
-            if isinstance(target, BaseCollider) and target.hitbox:
+            if (
+                isinstance(target, BaseCollider)
+                and target.hitbox
+                and target.obstructive
+            ):
                 if target.position == new_pos:
                     self.position = old_pos
                     return old_pos, old_pos
