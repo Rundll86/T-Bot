@@ -19,9 +19,10 @@ class SlimeEntity(BaseEntity):
             match self.is_player_crossed():
                 case True, direction:
                     self.direction = direction
-                    self.world.add_bullet(
-                        self,
-                        SlimeSprintBullet().set_position(
-                            self.position + direction_to_vector[direction] * 3
-                        ),
-                    )
+                    for i in range(3):
+                        self.world.add_bullet(
+                            self,
+                            SlimeSprintBullet().set_position(
+                                self.position + direction_to_vector[direction] * i
+                            ),
+                        )
