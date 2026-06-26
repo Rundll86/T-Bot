@@ -9,4 +9,4 @@ class PlayerSwordLight(BaseBullet):
         self.foreground = Color.from_rgb(0, 0, 0)
         self.background = Color.from_rgb(255, 255, 255)
         self.lifetime = 1
-        self.penetrate_count = -1
+        self.penetrate_count = 1

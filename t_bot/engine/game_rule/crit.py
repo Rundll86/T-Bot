@@ -11,11 +11,16 @@ def judge_crit(bullet: "BaseBullet", entity: "BaseEntity"):
         + (bullet.launcher.crit_rate if bullet.launcher is not None else 0)
         - entity.anti_crit
     )
-    scaled_damage = scale_damage(
-        bullet.base_damage,
-        bullet.launcher.crit_damage if bullet.launcher else 0,
+    is_crit = random.random() < rate
+    dmg = (
+        scale_damage(
+            bullet.base_damage,
+            bullet.launcher.crit_damage if bullet.launcher else 0,
+        )
+        if is_crit
+        else bullet.base_damage
     )
-    return random.random() < rate, scaled_damage
+    return is_crit, dmg
 
 
 def scale_damage(base: float, crit_damage: float):

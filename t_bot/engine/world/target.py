@@ -85,6 +85,10 @@ class BaseEntity(BaseCollider):
             if collider.launcher.is_player != self.is_player:
                 crit, dmg = judge_crit(collider, self)
                 self.take_damage(dmg, crit)
+                if collider.penetrate_count > 0:
+                    collider.penetrate_count -= 1
+                if collider.penetrate_count == 0:
+                    collider.public_die()
 
     def take_damage(self, dmg: float, crit: bool) -> float:
         total_dmg = damage_float(dmg)
