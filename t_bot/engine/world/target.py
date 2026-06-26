@@ -9,6 +9,7 @@ from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.event.logger import GameLogger
+from t_bot.engine.game_rule.crit import judge_crit
 from t_bot.engine.game_rule.damage import damage_float
 from t_bot.engine.renderer.components.progress_bar import ProgressBarRenderer
 from t_bot.engine.renderer.structs import BaseRenderable
@@ -69,7 +70,9 @@ class BaseEntity(BaseCollider):
         self.max_health = max_health
         self.current_health = self.max_health
         self.is_player = False
-        self.crit_rate = 0.05
+        self.crit_rate = 0.9
+        self.crit_damage = 1
+        self.anti_crit = 0
         self.health_bar = ProgressBarRenderer(20)
 
     def register_events(self):
@@ -80,17 +83,32 @@ class BaseEntity(BaseCollider):
             if not isinstance(collider, BaseBullet) or collider.launcher is None:
                 return
             if collider.launcher.is_player != self.is_player:
-                self.take_damage(collider.base_damage, False)
+                crit, dmg = judge_crit(collider, self)
+                self.take_damage(dmg, crit)
 
     def take_damage(self, dmg: float, crit: bool) -> float:
         total_dmg = damage_float(dmg)
         self.current_health -= total_dmg
         if not self.is_player:
             GameController.focus_enemy = self
-            GameLogger.add_log(f"造成了{total_dmg}点{'暴击' if crit else ''}伤害！")
+            if crit:
+                GameLogger.add_log(
+                    Text(
+                        f"造成了{total_dmg}点暴击伤害！",
+                        style=Style(color=Color.from_rgb(255, 251, 13)),
+                    )
+                )
+            else:
+                GameLogger.add_log(f"造成了{total_dmg}点伤害！")
         self.health_bar.max_value = self.max_health
         self.health_bar.current_value = self.current_health
+        if self.current_health <= 0:
+            self.public_die()
         return total_dmg
+
+    def public_die(self):
+        GameLogger.add_log(f"{self.display_name}已被打败！")
+        return super().public_die()
 
 
 class BaseBullet(BaseCollider):
@@ -110,11 +128,6 @@ class BaseBullet(BaseCollider):
             if self.lifetime > 0:
                 if timelifed > self.lifetime:
                     self.public_die()
-
-    def get_total_crit_rate(self):
-        return (
-            self.launcher.crit_rate if self.launcher is not None else 0
-        ) + self.crit_rate
 
 
 class BulletGroup:
