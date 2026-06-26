@@ -56,7 +56,7 @@ class WorldRenderer(BaseRenderer):
             self.add_line("*")
             for x in range(self.size.y):
                 target: BaseWorldTarget | None = None
-                for t in self.world.targets:
+                for t in reversed(self.world.targets):
                     if t.position == Vector2i(x, y):
                         target = t
                 if target is not None:
