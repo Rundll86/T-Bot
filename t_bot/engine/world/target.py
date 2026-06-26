@@ -102,6 +102,7 @@ class BaseCollider(BaseWorldTarget):
 class BaseEntity(BaseCollider):
     def __init__(self, display_name: str, max_health: float, texture: str) -> None:
         super().__init__(texture)
+        self.obstructive = True
         self.display_name = display_name
         self.max_health = max_health
         self.current_health = self.max_health
