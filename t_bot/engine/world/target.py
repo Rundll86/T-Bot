@@ -59,12 +59,15 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.world.target_died.emit(self)
 
     def move(self, delta: Vector2i):
-        self.position = Vector2i.from_tuple(self.position + delta).clamp(
+        old_pos = self.position
+        new_pos = Vector2i.from_tuple(self.position + delta).clamp(
             0,
             self.world.size.x - 1,
             0,
             self.world.size.y - 1,
         )
+        self.position = new_pos
+        return old_pos, new_pos
 
     @property
     def world(self):
@@ -76,6 +79,19 @@ class BaseCollider(BaseWorldTarget):
         self.collided_with = EventSubscriber()
         super().__init__(texture)
         self.hitbox = True
+
+    def move(self, delta: Vector2i):
+        old_pos, new_pos = super().move(delta)
+        if new_pos == old_pos:
+            return old_pos, new_pos
+        for target in self.world.targets:
+            if target is self:
+                continue
+            if isinstance(target, BaseCollider) and target.hitbox:
+                if target.position == new_pos:
+                    self.position = old_pos
+                    return old_pos, old_pos
+        return old_pos, new_pos
 
 
 class BaseEntity(BaseCollider):
