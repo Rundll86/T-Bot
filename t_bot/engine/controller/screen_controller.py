@@ -10,6 +10,12 @@ class ScreenController(EventBus):
         super().__init__()
         self.console = Console(highlight=False)
 
-    def redraw(self, data: str):
+    def clear(self):
         os.system("cls")
+
+    def redraw(self, data: str):
+        self.clear()
+        self.draw(data)
+
+    def draw(self, data: str):
         self.console.print(data)
