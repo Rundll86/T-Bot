@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import random
 
 from rich.text import Text
@@ -65,4 +66,9 @@ class FishEntity(BaseEntity):
             GameLogger.add_log(Text(f"速度+{value:.2f}", style="#00ff00"))
 
 
-powerups = [FlowerEntity, GrassEntity, DurainEntity, FishEntity]
+powerups: list[Callable[[], BaseEntity]] = [
+    FlowerEntity,
+    GrassEntity,
+    DurainEntity,
+    FishEntity,
+]
