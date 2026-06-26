@@ -279,6 +279,9 @@ class Vector2i:
     def to_vector2(self) -> "Vector2":
         return Vector2(float(self.x), float(self.y))
 
+    def to_vector2i(self) -> "Vector2i":
+        return Vector2i(round(self.x), round(self.y))
+
     def rotated_right(self) -> "Vector2i":
         return Vector2i(self.y, -self.x)
 
@@ -480,6 +483,17 @@ class Vector2i:
 
     def copy(self) -> "Vector2i":
         return Vector2i(self.x, self.y)
+
+    def symmetry(self, line: "Vector2i") -> "Vector2i":
+        len_sq = line.length_squared
+        if len_sq == 0:
+            return self.copy()
+        dot = self.dot(line)
+        factor = 2 * dot / len_sq
+        return Vector2i(
+            round(factor * line.x - self.x),
+            round(factor * line.y - self.y),
+        )
 
     def __repr__(self) -> str:
         return f"Vector2i({self.x}, {self.y})"

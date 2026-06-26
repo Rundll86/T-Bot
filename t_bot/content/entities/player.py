@@ -24,7 +24,6 @@ class PlayerEntity(BaseEntity):
                 PlayerSwordLight().set_position(Vector2i(1, 1)),
                 PlayerSwordLight().set_position(Vector2i(1, 0)),
                 PlayerSwordLight().set_position(Vector2i(1, -1)),
-                PlayerSwordLight().set_position(Vector2i(0, -1)),
             ]
         )
 
@@ -44,9 +43,12 @@ class PlayerEntity(BaseEntity):
             else:
                 match char:
                     case "j":
-                        delta = self.sword.position - self.position
+                        delta: Vector2i = self.sword.position - self.position
                         match self.attack_counter % 3:
                             case 0:
+                                self.sword.position = self.position + delta.symmetry(
+                                    direction_to_vector[self.direction]
+                                )
                                 self.world.add_target(
                                     *self.attack1.fetch(
                                         self.direction,

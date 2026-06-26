@@ -16,8 +16,8 @@ class BaseRenderer(ABC):
     def add_line(self, line: str) -> None:
         self.buffer.append(line)
 
-    def append_current(self, data: str) -> None:
-        self.buffer[-1] += data
+    def append_current(self, data: str | Text) -> None:
+        self.buffer[-1] += data.markup if isinstance(data, Text) else data
 
     def clear(self) -> None:
         self.buffer.clear()

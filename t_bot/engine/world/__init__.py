@@ -60,7 +60,7 @@ class WorldRenderer(BaseRenderer):
                     if t.position == Vector2i(x, y):
                         target = t
                 if target is not None:
-                    self.append_current(target.texture)
+                    self.append_current(target.render())
                 else:
                     self.append_current("  ")
             self.append_current("*")
