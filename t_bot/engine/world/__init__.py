@@ -1,6 +1,7 @@
 import sys
 
 from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
@@ -44,8 +45,10 @@ class GameWorld(EventBus):
         def input(char: str):
             if char == "e":
                 sys.exit(0)
-            else:
-                self.detect_collision()
+
+        @self.subscribe(RoundController.next_round)
+        def next_round():
+            self.detect_collision()
 
         @self.subscribe(self.target_died)
         def target_died(target: BaseWorldTarget):

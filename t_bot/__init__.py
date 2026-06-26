@@ -3,6 +3,7 @@ from random import randint
 from t_bot.content.entities.player import PlayerEntity
 from t_bot.content.entities.slime import SlimeEntity
 from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.controller.screen_controller import ScreenController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.renderer.components.game import GameRenderer
@@ -34,4 +35,5 @@ class TBot(EventBus):
         while True:
             input_char = self.game_controller.wait_input()
             self.world.input.emit(input_char)
+            RoundController.next_round.emit()
             self.redraw()
