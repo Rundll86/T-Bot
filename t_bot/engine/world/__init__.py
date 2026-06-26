@@ -45,18 +45,21 @@ class GameWorld(EventBus):
             if char == "e":
                 sys.exit(0)
             else:
-                for target in self.targets:
-                    if isinstance(target, BaseCollider):
-                        for next_target in self.targets:
-                            if isinstance(next_target, BaseCollider):
-                                if target.position == next_target.position:
-                                    target.collided_with.emit(next_target)
+                self.detect_collision()
 
         @self.subscribe(self.target_died)
         def target_died(target: BaseWorldTarget):
             while target in self.targets:
                 self.targets.remove(target)
             del target
+
+    def detect_collision(self):
+        for target in self.targets:
+            if isinstance(target, BaseCollider):
+                for next_target in self.targets:
+                    if isinstance(next_target, BaseCollider):
+                        if target.position == next_target.position:
+                            target.collided_with.emit(next_target)
 
 
 class WorldRenderer(BaseRenderer):
