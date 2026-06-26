@@ -4,7 +4,12 @@ from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
-from t_bot.engine.world.target import BaseCollider, BaseWorldTarget
+from t_bot.engine.world.target import (
+    BaseBullet,
+    BaseCollider,
+    BaseEntity,
+    BaseWorldTarget,
+)
 from t_bot.transform.vector import Vector2i
 
 
@@ -18,9 +23,19 @@ class GameWorld(EventBus):
 
     def add_target(self, *targets: BaseWorldTarget) -> tuple[BaseWorldTarget, ...]:
         for target in targets:
+            if isinstance(target, BaseBullet):
+                raise Exception("添加子弹目标时请使用add_bullet。")
             target.join_world.emit(self)
             self.targets.append(target)
         return targets
+
+    def add_bullet(
+        self, launcher: BaseEntity, *bullets: BaseBullet
+    ) -> tuple[BaseBullet, ...]:
+        for bullet in bullets:
+            bullet.launcher = launcher
+            self.add_target(bullet)
+        return bullets
 
     def register_events(self):
         super().register_events()

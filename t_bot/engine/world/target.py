@@ -7,6 +7,7 @@ from rich.text import Text
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
+from t_bot.engine.event.logger import GameLogger
 from t_bot.engine.renderer.structs import BaseRenderable
 from t_bot.transform.direction import Direction
 from t_bot.transform.vector import Vector2i
@@ -70,7 +71,9 @@ class BaseEntity(BaseCollider):
 
         @self.subscribe(self.collided_with)
         def collided_with(collider: BaseCollider):
-            pass
+            if not isinstance(collider, BaseBullet):
+                return
+            GameLogger.add_log("碰撞！")
 
 
 class BaseBullet(BaseCollider):
@@ -78,6 +81,7 @@ class BaseBullet(BaseCollider):
         super().__init__(texture)
         self.penetrate_count = penetrate_count
         self.lifetime: int = -1
+        self.launcher: BaseEntity | None = None
 
     def register_events(self):
         super().register_events()
