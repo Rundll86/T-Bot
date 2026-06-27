@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import math
-from typing import Union, Tuple
+from typing import TYPE_CHECKING, Union, Tuple
+
+if TYPE_CHECKING:
+    from t_bot.transform.direction import Direction
 
 
 class Vector2:
@@ -298,6 +301,19 @@ class Vector2i:
 
     def rotated_left(self) -> "Vector2i":
         return Vector2i(-self.y, self.x)
+
+    def rotated_by_direction(self, direction: "Direction") -> "Vector2i":
+        from t_bot.transform.direction import Direction
+
+        if direction == Direction.RIGHT:
+            return self
+        elif direction == Direction.UP:
+            return self.rotated_right()
+        elif direction == Direction.LEFT:
+            return self.rotated_right().rotated_right()
+        elif direction == Direction.DOWN:
+            return self.rotated_left()
+        return self
 
     @property
     def length_squared(self) -> int:

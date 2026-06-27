@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 from rich.style import Style
-from t_bot.content.bullets.player_sword import PlayerSword
-from t_bot.content.bullets.player_sword_light import PlayerSwordLight
-from t_bot.engine.controller.audio_controller import AudioController
+from t_bot.content.weapons.player_sword_weapon import PlayerSwordWeapon
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.renderer.effects.style_blend import StyleBlendEffect
-from t_bot.engine.world.target import BaseEntity, BulletGroup
+from t_bot.engine.world import GameWorld
+from t_bot.engine.world.target import BaseEntity
 from t_bot.transform.vector import Vector2i
 from t_bot.transform.direction import direction_to_vector, input_to_direction
 
@@ -21,29 +20,16 @@ class PlayerEntity(BaseEntity):
         self.z_order = 3
         self.is_player = True
         self.effects.append(StyleBlendEffect(Style(bold=True)))
-        self.sword = PlayerSword()
-        self.attack_counter = 0
-        self.sword_group0 = BulletGroup([PlayerSword().set_position(Vector2i(0, 1))])
-        self.sword_group1 = BulletGroup([PlayerSword().set_position(Vector2i(0, -1))])
-        self.sword_group2 = BulletGroup([PlayerSword().set_position(Vector2i(3, 0))])
-        self.sword_group3 = BulletGroup([PlayerSword().set_position(Vector2i(1, 0))])
-        self.attack1 = BulletGroup(
-            [
-                PlayerSwordLight().set_position(Vector2i(1, 1)),
-                PlayerSwordLight().set_position(Vector2i(1, 0)),
-                PlayerSwordLight().set_position(Vector2i(1, -1)),
-            ]
-        )
-        self.attack2 = BulletGroup(
-            [
-                PlayerSwordLight().set_position(Vector2i(1, 0)),
-                PlayerSwordLight().set_position(Vector2i(2, 0)),
-            ]
-        )
+        self.weapon = PlayerSwordWeapon().set_player(self)
         self.attack_force = 10
 
     def register_events(self):
         super().register_events()
+
+        @self.subscribe(self.join_world)
+        def join_world(world: GameWorld):
+            self.weapon.position = self.position + Vector2i(0, 1)
+            world.add_target(self.weapon)
 
         @self.subscribe(self.my_turn)
         def my_turn():
@@ -53,64 +39,8 @@ class PlayerEntity(BaseEntity):
                 delta = direction_to_vector[direction]
                 self.move(delta)
                 self.direction = direction
-                self.update_sword(self.sword_group0)
-                self.attack_counter = 0
+                self.weapon.update_visual()
             else:
                 match char:
                     case "j":
-                        delta = Vector2i.from_tuple(self.sword.position - self.position)
-                        match self.attack_counter % 5:
-                            case 0:
-                                self.update_sword(self.sword_group1)
-                                self.world.add_bullet(
-                                    self,
-                                    *self.attack1.modify(
-                                        lambda b: b.set_base_damage(
-                                            self.attack_force * 1.1
-                                        )
-                                    ).fetch(
-                                        self.direction,
-                                        self.position,
-                                    ),
-                                )
-                                AudioController.play("swing1.mp3")
-                            case 1:
-                                self.update_sword(self.sword_group0)
-                                self.world.add_bullet(
-                                    self,
-                                    *self.attack1.modify(
-                                        lambda b: b.set_base_damage(
-                                            self.attack_force * 0.9
-                                        )
-                                    ).fetch(
-                                        self.direction,
-                                        self.position,
-                                    ),
-                                )
-                                AudioController.play("swing2.mp3")
-                            case 2:
-                                self.update_sword(self.sword_group2)
-                                self.world.add_bullet(
-                                    self,
-                                    *self.attack2.modify(
-                                        lambda b: b.set_base_damage(
-                                            self.attack_force * 1.5
-                                        )
-                                    ).fetch(
-                                        self.direction,
-                                        self.position,
-                                    ),
-                                )
-                                AudioController.play("swing3.mp3")
-                            case 3:
-                                self.update_sword(self.sword_group3)
-                            case 4:
-                                self.update_sword(self.sword_group0)
-                        self.attack_counter += 1
-                        self.sword.hitbox = True
-
-    def update_sword(self, group: BulletGroup):
-        self.sword.public_die()
-        self.sword = group.fetch(self.direction, self.position)[0]
-        self.sword.hitbox = False
-        self.world.add_bullet(self, self.sword)
+                        self.weapon.attack()

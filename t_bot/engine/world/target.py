@@ -1,6 +1,8 @@
+from __future__ import annotations
 from collections.abc import Callable
+from abc import abstractmethod
 import copy
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from rich.color import Color
 from rich.style import Style
@@ -19,6 +21,9 @@ from t_bot.engine.renderer.effects.hurt import HurtEffect
 from t_bot.engine.renderer.structs import BaseRenderable
 from t_bot.transform.direction import Direction
 from t_bot.transform.vector import Vector2i
+
+if TYPE_CHECKING:
+    from t_bot.content.entities.player import PlayerEntity
 
 
 class BaseWorldTarget(BaseRenderable, EventBus):
@@ -88,6 +93,21 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         for effect in self.effects:
             base += effect.style
         return base
+
+
+class BaseWeapon(BaseWorldTarget):
+    def __init__(self, texture: str) -> None:
+        super().__init__(texture)
+        self.z_order = 3
+        self.player: PlayerEntity | None = None
+
+    @abstractmethod
+    def attack(self) -> None:
+        pass
+
+    def set_player(self, player: PlayerEntity):
+        self.player = player
+        return self
 
 
 class BaseCollider(BaseWorldTarget):
