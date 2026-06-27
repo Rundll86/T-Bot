@@ -1,4 +1,5 @@
 from t_bot.content.bullets.player_arrow import PlayerArrow
+from t_bot.engine.controller.audio_controller import AudioController
 from t_bot.engine.world.target import BaseWeapon
 from t_bot.transform.direction import direction_to_vector
 from t_bot.transform.vector import Vector2i
@@ -6,7 +7,7 @@ from t_bot.transform.vector import Vector2i
 
 class PlayerBowWeapon(BaseWeapon):
     def __init__(self) -> None:
-        super().__init__("弓")
+        super().__init__("苍弓", "弓")
         self.charging: int = 0
         self.visual_groups: list[list[Vector2i]] = [
             [Vector2i(1, 0)],
@@ -25,11 +26,14 @@ class PlayerBowWeapon(BaseWeapon):
     def attack(self) -> None:
         assert self.player is not None
         player = self.player
-        self.charging += 1
-        if self.charging >= 3:
+        if self.charging >= 1:
             self.charging = 0
             direction = player.direction
             arrow = PlayerArrow()
             arrow.direction = direction
-            arrow.set_position(player.position + direction_to_vector[direction])
+            arrow.set_position(player.position + direction_to_vector[direction] * 2)
             player.world.add_bullet(player, arrow)
+            AudioController.play("whoosh.wav")
+        else:
+            self.charging += 1
+            AudioController.play("flash.ogg")

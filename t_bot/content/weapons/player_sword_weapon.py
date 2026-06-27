@@ -6,7 +6,7 @@ from t_bot.transform.vector import Vector2i
 
 class PlayerSwordWeapon(BaseWeapon):
     def __init__(self) -> None:
-        super().__init__("剑")
+        super().__init__("重剑", "剑")
         self.attack_counter: int = 0
         self.visual_groups: list[list[Vector2i]] = [
             [Vector2i(0, 1)],

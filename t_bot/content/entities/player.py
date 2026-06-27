@@ -50,3 +50,7 @@ class PlayerEntity(BaseEntity):
                 match char:
                     case "j":
                         self.weapons[self.using_weapon].attack()
+                    case "x":
+                        self.using_weapon = (self.using_weapon + 1) % len(self.weapons)
+                    case "z":
+                        self.using_weapon = (self.using_weapon - 1) % len(self.weapons)

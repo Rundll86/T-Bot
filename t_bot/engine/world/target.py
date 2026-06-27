@@ -35,8 +35,8 @@ class BaseWorldTarget(BaseRenderable, EventBus):
         self.position: Vector2i = Vector2i.zero()
         self.texture: str = texture
         self.effects: list["BaseEffect"] = []
-        self.background: Color = Color.from_rgb(0, 0, 0)
-        self.foreground: Color = Color.from_rgb(255, 255, 255)
+        self.background: Color | str = Color.from_rgb(0, 0, 0)
+        self.foreground: Color | str = Color.from_rgb(255, 255, 255)
         self.direction: Direction = Direction.UP
         self.z_order: int = 0
         self.timelifed: int = 0
@@ -86,10 +86,11 @@ class BaseWorldTarget(BaseRenderable, EventBus):
 
 
 class BaseWeapon(BaseWorldTarget):
-    def __init__(self, texture: str) -> None:
+    def __init__(self, display_name: str, texture: str) -> None:
         super().__init__(texture)
         self.z_order = 3
         self.player: PlayerEntity | None = None
+        self.display_name: str = display_name
 
     @abstractmethod
     def get_position(self, index: int) -> Vector2i:

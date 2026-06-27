@@ -1,5 +1,7 @@
 import random
 
+from rich.color import Color
+
 from t_bot.content.bullets.slime_sprint import SlimeSprintBullet
 from t_bot.content.entities import powerups
 from t_bot.content.entities.player import direction_to_vector
@@ -10,6 +12,7 @@ class SlimeEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("史莱姆", 100, "史")
         self.speed = random.uniform(0.1, 0.4)
+        self.background = Color.from_rgb(3, 156, 0)
 
     def register_events(self):
         super().register_events()

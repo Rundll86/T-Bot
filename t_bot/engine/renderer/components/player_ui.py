@@ -32,7 +32,7 @@ class PlayerUIRenderer(BaseRenderer):
             self.add_line(f"|{' ' * self.size}|")
         self.add_line("-" * (self.size + 2))
         # 分数&波次
-        self.add_line("|")
+        self.add_line(f"|{' ' * self.size}|")
         self.add_line("-" * (self.size + 2))
         # 信息
         # 玩家状态
@@ -83,7 +83,7 @@ class PlayerUIRenderer(BaseRenderer):
             self.auto_replace(Vector2i(3, 15 + i), log)
             i += 1
         # 分数&波次
-        self.replace_at(
+        self.auto_replace(
             Vector2i(3, 16 + i),
-            f"第 {WaveController.current_wave} 波 | 分数 {GameController.got_score}",
+            f"{GameController.player.weapons[GameController.player.using_weapon].display_name} · 第 {WaveController.current_wave} 波 | 分数 {GameController.got_score}",
         )

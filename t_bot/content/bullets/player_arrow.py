@@ -8,9 +8,9 @@ class PlayerArrow(BaseBullet):
     def __init__(self) -> None:
         super().__init__("箭")
         self.foreground = Color.from_rgb(255, 255, 200)
-        self.speed = 2
+        self.speed = 1
         self.lifetime = 10
-        self.penetrate_count = 0
+        self.penetrate_count = 3
         self.base_damage = 15
 
     def register_events(self):
