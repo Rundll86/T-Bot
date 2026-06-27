@@ -14,17 +14,17 @@ class ActionQueueRenderer(BaseRenderer):
         self.world = world
         self.width = width
         self.height = height
-        self.padding_height = width - 2
+        self.padding_width = width - 2
 
     def render(self) -> None:
-        self.add_line(f"┌{'─' * self.padding_height}┐")
-        self.add_line(f"│{' ' * self.padding_height}│")
+        self.add_line(f"┌{'─' * self.padding_width}┐")
+        self.add_line(f"│{' ' * self.padding_width}│")
         for _ in range(self.height):
-            self.add_line(f"│{' ' * self.padding_height}│")
-        self.add_line(f"└{'─' * self.padding_height}┘")
+            self.add_line(f"│{' ' * self.padding_width}│")
+        self.add_line(f"└{'─' * self.padding_width}┘")
         hd = " 行动队列 "
         hd_w = get_space_count(hd)
-        hd_x = 1 + (self.padding_height - hd_w) // 2
+        hd_x = 1 + (self.padding_width - hd_w) // 2
         self.auto_replace(Vector2i(hd_x, 0), hd)
         actors = sorted(
             (t for t in self.world.targets if isinstance(t, BaseEntity)),
@@ -57,11 +57,11 @@ class ActionQueueRenderer(BaseRenderer):
                 )
                 bar.length = max(
                     2,
-                    self.padding_height
+                    self.padding_width
                     - get_space_count(str(speed_prefix))
                     - get_space_count(str(name))
                     - get_space_count(str(progress_text))
-                    - 4,
+                    - 5,
                 )
                 bar.current_value = actor.action_progress
                 bar_str = bar.redraw()
