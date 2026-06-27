@@ -9,7 +9,7 @@ from t_bot.transform.vector import Vector2i
 
 
 class ActionQueueRenderer(BaseRenderer):
-    def __init__(self, world: GameWorld, width: int = 30, height: int = 15) -> None:
+    def __init__(self, world: GameWorld, width: int = 35, height: int = 15) -> None:
         super().__init__()
         self.world = world
         self.width = width
@@ -52,7 +52,7 @@ class ActionQueueRenderer(BaseRenderer):
                     style="white bold",
                 )
                 progress_text = Text(
-                    f"{actor.action_progress:.1f}",
+                    f"{actor.action_progress:.2f}",
                     style="green" if actor.action_progress > 0.5 else "white",
                 )
                 bar.length = max(
