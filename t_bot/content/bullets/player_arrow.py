@@ -11,7 +11,6 @@ class PlayerArrow(BaseBullet):
         self.speed = 1
         self.lifetime = 10
         self.penetrate_count = 3
-        self.base_damage = 15
 
     def register_events(self):
         super().register_events()

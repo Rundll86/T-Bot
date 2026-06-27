@@ -9,7 +9,7 @@ class ScreenController(EventBus):
         super().__init__()
         self.console = Console(highlight=False)
         self.live = Live(
-            "Loading...",
+            "WSAD移动，J攻击，Z/X切换武器，按下任意键开始游戏",
             screen=True,
             refresh_per_second=60,
             console=self.console,

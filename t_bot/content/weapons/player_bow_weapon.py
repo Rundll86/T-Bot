@@ -32,6 +32,7 @@ class PlayerBowWeapon(BaseWeapon):
             arrow = PlayerArrow()
             arrow.direction = direction
             arrow.set_position(player.position + direction_to_vector[direction] * 2)
+            arrow.set_base_damage(player.attack_force * 1.25)
             player.world.add_bullet(player, arrow)
             AudioController.play("whoosh.wav")
         else:

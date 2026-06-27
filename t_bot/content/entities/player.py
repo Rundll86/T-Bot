@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from rich.style import Style
 from t_bot.content.weapons.player_bow_weapon import PlayerBowWeapon
 from t_bot.content.weapons.player_sword_weapon import PlayerSwordWeapon
+from t_bot.engine.controller.audio_controller import AudioController
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.renderer.effects.style_blend import StyleBlendEffect
@@ -52,5 +53,7 @@ class PlayerEntity(BaseEntity):
                         self.weapons[self.using_weapon].attack()
                     case "x":
                         self.using_weapon = (self.using_weapon + 1) % len(self.weapons)
+                        AudioController.play("boing.mp3")
                     case "z":
                         self.using_weapon = (self.using_weapon - 1) % len(self.weapons)
+                        AudioController.play("boing.mp3")
