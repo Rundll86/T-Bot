@@ -1,16 +1,19 @@
 from collections.abc import Callable
 import random
 
+from rich.style import Style
 from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.event.logger import GameLogger
+from t_bot.engine.renderer.effects.style_blend import StyleBlendEffect
 from t_bot.engine.world.target import BaseEntity
 
 
 class FlowerEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("花朵", 1, "花")
+        self.effects.append(StyleBlendEffect(Style(color="magenta")))
 
     def register_events(self):
         super().register_events()
@@ -25,6 +28,7 @@ class FlowerEntity(BaseEntity):
 class GrassEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("杂草", 1, "草")
+        self.effects.append(StyleBlendEffect(Style(color="green")))
 
     def register_events(self):
         super().register_events()
@@ -38,6 +42,7 @@ class GrassEntity(BaseEntity):
 class DurainEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("榴莲", 30, "榴")
+        self.effects.append(StyleBlendEffect(Style(color="yellow")))
 
     def register_events(self):
         super().register_events()
@@ -55,6 +60,7 @@ class DurainEntity(BaseEntity):
 class FishEntity(BaseEntity):
     def __init__(self) -> None:
         super().__init__("三文鱼", 1, "鱼")
+        self.effects.append(StyleBlendEffect(Style(color="#ff8800")))
 
     def register_events(self):
         super().register_events()
