@@ -29,7 +29,7 @@ class PlayerUIRenderer(BaseRenderer):
         self.add_line("-" * (self.size + 2))
         # 行动日志
         for _ in range(self.show_log_count):
-            self.add_line("|")
+            self.add_line(f"|{' ' * self.size}|")
         self.add_line("-" * (self.size + 2))
         # 分数&波次
         self.add_line("|")
@@ -80,7 +80,7 @@ class PlayerUIRenderer(BaseRenderer):
         # 日志
         i = 0
         for log in GameLogger.read(self.show_log_count):
-            self.replace_at(Vector2i(3, 15 + i), log)
+            self.auto_replace(Vector2i(3, 15 + i), log)
             i += 1
         # 分数&波次
         self.replace_at(

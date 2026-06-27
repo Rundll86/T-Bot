@@ -1,7 +1,11 @@
+from rich.text import Text
+
 from t_bot.engine.renderer import BaseRenderer
+from t_bot.engine.renderer.components.progress_bar import ProgressBarRenderer
 from t_bot.engine.util.character import get_space_count
 from t_bot.engine.world import GameWorld
 from t_bot.engine.world.target import BaseEntity
+from t_bot.transform.vector import Vector2i
 
 
 class ActionQueueRenderer(BaseRenderer):
@@ -11,19 +15,22 @@ class ActionQueueRenderer(BaseRenderer):
         super().__init__()
         self.world = world
         self.width = width
-        self.rows = 7
+        self.rows = 15
         self._inner = width - 2
-        self.bar_front = "█"
-        self.bar_back = "░"
 
     def render(self) -> None:
+        # 先画空框
+        self.add_line(f"┌{'─' * self._inner}┐")
+        self.add_line(f"│{' ' * self._inner}│")
+        for _ in range(self.rows):
+            self.add_line(f"│{' ' * self._inner}│")
+        self.add_line(f"└{'─' * self._inner}┘")
+
+        # 标题居中
         hd = " 行动队列 "
         hd_w = get_space_count(hd)
-        pad = self._inner - hd_w
-        hd_left = pad // 2
-        hd_right = pad - hd_left
-        self.add_line(f"┌{'─' * hd_left}{hd}{'─' * hd_right}┐")
-        self.add_line(f"│{' ' * self._inner}│")
+        hd_x = 1 + (self._inner - hd_w) // 2
+        self.auto_replace(Vector2i(hd_x, 0), hd)
 
         actors = sorted(
             (t for t in self.world.targets if isinstance(t, BaseEntity)),
@@ -31,22 +38,32 @@ class ActionQueueRenderer(BaseRenderer):
             reverse=True,
         )
 
+        bar = ProgressBarRenderer(
+            1,
+            max_value=1,
+            front_char="█",
+            front_color="#00ffee",
+            back_char="░",
+            back_color="#00ffee",
+            decorated=False,
+        )
+
         for i in range(self.rows):
             if i < len(actors):
                 actor = actors[i]
-                name = actor.display_name
-                pct = f"{actor.action_progress:.2f}"
-                prefix_w = get_space_count(name) + 1 + get_space_count(pct)
-                bar_length = max(2, self._inner - prefix_w - 3)
-                filled = max(
-                    0, min(int(actor.action_progress * bar_length), bar_length)
+                speed_prefix = Text(f"[+{actor.speed:.2f}] ", style="cyan")
+                name = speed_prefix + Text(actor.display_name, style="white bold")
+                pct = Text(
+                    f"{actor.action_progress:.1f}",
+                    style="green" if actor.action_progress > 0.5 else "white",
                 )
-                bar = self.bar_front * filled + self.bar_back * (bar_length - filled)
-                body = f"{name} {bar} {pct}"
-                body_w = get_space_count(body)
-                pad_r = self._inner - body_w - 1
-                self.add_line(f"│ {body}{' ' * pad_r}│")
-            else:
-                self.add_line(f"│{' ' * self._inner}│")
-
-        self.add_line(f"└{'─' * self._inner}┘")
+                pct_w = get_space_count(str(pct))
+                name_w = get_space_count(str(name))
+                bar_length = max(2, self._inner - name_w - pct_w - 4)
+                bar.length = bar_length
+                bar.current_value = actor.action_progress
+                bar_str = bar.redraw()
+                self.auto_replace(
+                    Vector2i(2, 2 + i),
+                    Text.assemble(name, " ", Text.from_markup(bar_str), " ", pct),
+                )
