@@ -9,7 +9,7 @@ class GameRenderer(BaseRenderer):
         super().__init__()
         self.world_renderer = WorldRenderer(world)
         self.player_ui_renderer = PlayerUIRenderer(40)
-        self.action_queue_renderer = ActionQueueRenderer(world)
+        self.action_queue_renderer = ActionQueueRenderer(world, height=world.size.y - 1)
 
     def render(self) -> None:
         world_lines = self.world_renderer.redraw().split("\n")
