@@ -10,7 +10,7 @@ class ScreenController(EventBus):
         super().__init__()
         self.console = Console(highlight=False)
         self.live = Live(
-            get_texture("logo/1.txt"),
+            get_texture("logo.txt"),
             screen=True,
             refresh_per_second=60,
             console=self.console,
