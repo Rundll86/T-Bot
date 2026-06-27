@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from rich.color import Color
 from rich.style import Style
 
+from t_bot.engine.controller.audio_controller import AudioController
 from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.renderer.effect import BaseEffect
 
@@ -15,6 +16,8 @@ class HurtEffect(BaseEffect):
         super().__init__(Style(bgcolor=Color.from_rgb(255, 0, 0)))
 
     def run(self, target: "BaseWorldTarget"):
+        AudioController.play("body-hit.mp3")
+
         @self.subscribe(RoundController.time_went)
         def time_went(input: str):
             self.exit()

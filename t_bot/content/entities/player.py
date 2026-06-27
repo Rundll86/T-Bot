@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from rich.style import Style
 from t_bot.content.bullets.player_sword import PlayerSword
 from t_bot.content.bullets.player_sword_light import PlayerSwordLight
+from t_bot.engine.controller.audio_controller import AudioController
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.renderer.effects.style_blend import StyleBlendEffect
@@ -72,6 +73,7 @@ class PlayerEntity(BaseEntity):
                                         self.position,
                                     ),
                                 )
+                                AudioController.play("swing1.mp3")
                             case 1:
                                 self.update_sword(self.sword_group0)
                                 self.world.add_bullet(
@@ -85,6 +87,7 @@ class PlayerEntity(BaseEntity):
                                         self.position,
                                     ),
                                 )
+                                AudioController.play("swing2.mp3")
                             case 2:
                                 self.update_sword(self.sword_group2)
                                 self.world.add_bullet(
@@ -98,6 +101,7 @@ class PlayerEntity(BaseEntity):
                                         self.position,
                                     ),
                                 )
+                                AudioController.play("swing3.mp3")
                             case 3:
                                 self.update_sword(self.sword_group3)
                             case 4:
