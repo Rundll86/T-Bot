@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['index.py'],
+    ["index.py"],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[("assets", "assets")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='T-Bot',
+    name="T-Bot",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
