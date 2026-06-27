@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from rich.style import Style
+from t_bot.content.weapons.player_bow_weapon import PlayerBowWeapon
 from t_bot.content.weapons.player_sword_weapon import PlayerSwordWeapon
 from t_bot.engine.controller.game_controller import GameController
 from t_bot.engine.controller.round_controller import RoundController
@@ -20,8 +21,11 @@ class PlayerEntity(BaseEntity):
         self.z_order = 3
         self.is_player = True
         self.effects.append(StyleBlendEffect(Style(bold=True)))
-        self.weapons: list[BaseWeapon] = [PlayerSwordWeapon().set_player(self)]
-        self.using_weapon: int = 0
+        self.weapons: list[BaseWeapon] = [
+            PlayerSwordWeapon().set_player(self),
+            PlayerBowWeapon().set_player(self),
+        ]
+        self.using_weapon: int = 1
         self.attack_force = 10
 
     def register_events(self):
