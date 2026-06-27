@@ -4,6 +4,7 @@ from rich.style import Style
 from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
+from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.renderer import BaseRenderer
@@ -24,6 +25,7 @@ class GameWorld(EventBus):
         self.target_died = EventSubscriber()
         self.targets: list[BaseWorldTarget] = []
         self.size: Vector2i = Vector2i(20, 20)
+        self.player_pending_turns: int = 0
         super().__init__()
 
     def add_target(self, *targets: BaseWorldTarget) -> tuple[BaseWorldTarget, ...]:
@@ -51,6 +53,23 @@ class GameWorld(EventBus):
         def input(char: str):
             if char == "e":
                 sys.exit(0)
+
+        @self.subscribe(RoundController.time_went)
+        def on_time_went(_input: str):
+            action_queue: list[BaseWorldTarget] = []
+            for target in list(self.targets):
+                target.timelifed += 1
+                target.aged.emit(target.timelifed)
+                target.action_progress += target.speed
+                while target.action_progress >= 1:
+                    target.action_progress -= 1
+                    action_queue.append(target)
+            self.player_pending_turns = 0
+            for target in action_queue:
+                if isinstance(target, BaseEntity) and target.is_player:
+                    self.player_pending_turns += 1
+                else:
+                    target.my_turn.emit()
 
         @self.subscribe(self.target_died)
         def target_died(target: BaseWorldTarget):

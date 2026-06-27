@@ -9,11 +9,19 @@ from t_bot.transform.vector import Vector2i
 
 
 class ProgressBarRenderer(BaseRenderer):
-    def __init__(self, length: int, max_value: float = 100) -> None:
+    def __init__(
+        self,
+        length: int,
+        max_value: float = 100,
+        front_char: str = "#",
+        back_char: str = "-",
+    ) -> None:
         super().__init__()
         self.max_value = max_value
         self.current_value = max_value
         self.length = length
+        self.front_char = front_char
+        self.back_char = back_char
 
     def get_progress(self) -> float:
         return self.current_value / self.max_value
@@ -27,8 +35,12 @@ class ProgressBarRenderer(BaseRenderer):
             Vector2i(0, 0),
             Text("\\[ ")
             + Text(
-                "#" * self.get_frontend(), style=Style(color=Color.from_rgb(0, 255, 0))
+                self.front_char * self.get_frontend(),
+                style=Style(color=Color.from_rgb(0, 255, 0)),
             )
-            + Text("-" * (self.length - self.get_frontend()), style="red")
+            + Text(
+                self.back_char * (self.length - self.get_frontend()),
+                style="red",
+            )
             + Text(" ]"),
         )

@@ -32,6 +32,14 @@ class TBot(EventBus):
                 RoundController.last_input = input_char
                 self.world.input.emit(input_char)
                 RoundController.time_went.emit(input_char)
+                while self.world.player_pending_turns > 0:
+                    self.world.player_pending_turns -= 1
+                    GameController.player.my_turn.emit()
+                    if self.world.player_pending_turns > 0:
+                        self.redraw()
+                        input_char = self.game_controller.wait_input()
+                        RoundController.last_input = input_char
+                        self.world.input.emit(input_char)
                 self.world.detect_collision()
                 self.redraw()
         finally:

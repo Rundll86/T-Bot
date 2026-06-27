@@ -9,7 +9,6 @@ from rich.style import Style
 from rich.text import Text
 
 from t_bot.engine.controller.game_controller import GameController
-from t_bot.engine.controller.round_controller import RoundController
 from t_bot.engine.event.event_bus import EventBus
 from t_bot.engine.event.event_subscriber import EventSubscriber
 from t_bot.engine.event.logger import GameLogger
@@ -57,15 +56,6 @@ class BaseWorldTarget(BaseRenderable, EventBus):
 
     def register_events(self):
         super().register_events()
-
-        @self.subscribe(RoundController.time_went)
-        def next_round(input: str):
-            self.timelifed += 1
-            self.aged.emit(self.timelifed)
-            self.action_progress += self.speed
-            while self.action_progress >= 1:
-                self.action_progress -= 1
-                self.my_turn.emit()
 
     def public_die(self):
         self.world.target_died.emit(self)
