@@ -22,8 +22,7 @@ class TBot(EventBus):
         WaveController.judge_next()
 
     def redraw(self):
-        self.screen_controller.clear()
-        self.screen_controller.draw(self.game_renderer.redraw())
+        self.screen_controller.redraw(self.game_renderer.redraw())
 
     def loop(self):
         self.redraw()
