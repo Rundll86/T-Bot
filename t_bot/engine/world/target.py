@@ -92,6 +92,14 @@ class BaseWeapon(BaseWorldTarget):
         self.player: PlayerEntity | None = None
 
     @abstractmethod
+    def get_position(self, index: int) -> Vector2i:
+        pass
+
+    @abstractmethod
+    def update_visual(self) -> None:
+        pass
+
+    @abstractmethod
     def attack(self) -> None:
         pass
 
