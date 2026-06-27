@@ -26,7 +26,7 @@ class PlayerEntity(BaseEntity):
             PlayerSwordWeapon().set_player(self),
             PlayerBowWeapon().set_player(self),
         ]
-        self.using_weapon: int = 1
+        self.using_weapon: int = 0
         self.attack_force = 10
 
     def register_events(self):
