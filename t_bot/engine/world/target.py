@@ -96,7 +96,7 @@ class BaseWeapon(BaseWorldTarget):
         pass
 
     @abstractmethod
-    def update_visual(self) -> None:
+    def player_moved(self) -> None:
         pass
 
     @abstractmethod

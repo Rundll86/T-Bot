@@ -34,7 +34,7 @@ class PlayerSwordWeapon(BaseWeapon):
         rel = self.visual_groups[index][0]
         return rel.rotated_by_direction(direction) + self.player.position
 
-    def update_visual(self) -> None:
+    def player_moved(self) -> None:
         assert self.player is not None
         self.attack_counter = 0
         self.position = self.get_position(0)

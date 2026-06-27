@@ -41,7 +41,7 @@ class PlayerEntity(BaseEntity):
                 delta = direction_to_vector[direction]
                 self.move(delta)
                 self.direction = direction
-                self.weapons[self.using_weapon].update_visual()
+                self.weapons[self.using_weapon].player_moved()
             else:
                 match char:
                     case "j":
