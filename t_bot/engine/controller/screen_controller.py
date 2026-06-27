@@ -1,6 +1,7 @@
 from rich.console import Console
 from rich.live import Live
 
+from t_bot.engine.controller.asset_controller import get_texture
 from t_bot.engine.event.event_bus import EventBus
 
 
@@ -9,7 +10,7 @@ class ScreenController(EventBus):
         super().__init__()
         self.console = Console(highlight=False)
         self.live = Live(
-            "WSAD移动，J攻击，Z/X切换武器，按下任意键开始游戏",
+            get_texture("logo/1.txt"),
             screen=True,
             refresh_per_second=60,
             console=self.console,
