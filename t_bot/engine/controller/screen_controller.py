@@ -8,7 +8,11 @@ class ScreenController(EventBus):
     def __init__(self) -> None:
         super().__init__()
         self.console = Console(highlight=False)
-        self.live = Live("Loading...", screen=True)
+        self.live = Live("Loading...", screen=True, refresh_per_second=60)
+        self.live.start()
 
     def redraw(self, data: str):
         self.live.update(data)
+
+    def stop(self):
+        self.live.stop()

@@ -86,7 +86,7 @@ class WorldRenderer(BaseRenderer):
         self.add_line(f"*{'**' * self.size.x}*")
         for y in range(self.size.y):
             self.add_line("*")
-            for x in range(self.size.y):
+            for x in range(self.size.x):
                 targets_at_pos = [
                     t for t in self.world.targets if t.position == Vector2i(x, y)
                 ]

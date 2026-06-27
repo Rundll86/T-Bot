@@ -26,10 +26,13 @@ class TBot(EventBus):
 
     def loop(self):
         self.redraw()
-        while True:
-            input_char = self.game_controller.wait_input()
-            RoundController.last_input = input_char
-            self.world.input.emit(input_char)
-            RoundController.time_went.emit(input_char)
-            self.world.detect_collision()
-            self.redraw()
+        try:
+            while True:
+                input_char = self.game_controller.wait_input()
+                RoundController.last_input = input_char
+                self.world.input.emit(input_char)
+                RoundController.time_went.emit(input_char)
+                self.world.detect_collision()
+                self.redraw()
+        finally:
+            self.screen_controller.stop()
